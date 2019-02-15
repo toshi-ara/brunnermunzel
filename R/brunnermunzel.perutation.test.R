@@ -80,8 +80,8 @@ brunnermunzel.permutation.test.default <-
         DNAME <-  paste(deparse(substitute(x)), "and",
                         deparse(substitute(y)))
 
-        nx <- length(x)
-        ny <- length(y)
+        nx <- length(x); ny <- length(y)
+        if (nx == 1 || ny == 1) stop("not enough observations")
         n_nCr <- choose(nx + ny, nx)
 
         res <- .Fortran("bm_permutation_stat",

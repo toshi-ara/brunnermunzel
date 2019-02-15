@@ -94,6 +94,8 @@ brunnermunzel.test.default <-
     x <- na.omit(x); y <- na.omit(y)
 
     n1 <- length(x); n2 <- length(y)
+    if (n1 == 1 || n2 == 1) stop("not enough observations")
+
     r1 <- rank(x); r2 <- rank(y); r <- rank(c(x, y))
     m1 <- mean(r[1:n1]); m2 <- mean(r[n1 + 1:n2])
 
