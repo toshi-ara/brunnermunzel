@@ -1,0 +1,14 @@
+Package: brunnermunzel
+Type: Package
+Title: Functions for (permuted) Brunner-Munzel test
+Version: 0.1.1
+Date: 2019-02-15
+Authors@R: person("Toshiaki", "Ara", email = "toshiaki.ara@gmail.com",
+  role = c("aut", "cre"))
+License: GPL-2 | GPL-3
+Description: The functions for Brunner-Munzel test and
+    permuted Brunner-Munzel test,
+    which enable to use formula as argument.
+URL: https://github.com/toshi-ara/brunnermunzel
+BugReports: https://github.com/toshi-ara/brunnermunzel/issues/
+RoxygenNote: 6.1.1

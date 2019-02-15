@@ -1,0 +1,83 @@
+---
+title: brunnermunzel
+author: Toshiaki Ara
+date: "`r Sys.Date()`"
+---
+
+# Introduction
+
+For Brunner-Munzel test
+`brunner.munzel.test` function in `lawstat` package is well-known.
+`brunnermunzel.test` in this package also accepts **formula**.
+
+Moreover,
+ this package provides
+ `brunnermunzel.permutation.test` function
+  for a permuted Brunner-Munzel test
+  used in the case of small sample size.
+
+The script of `brunnermunzel.test` is derived from
+ that of `lawstat` package and slightly modified.
+Thanks to Vyacheslav Lyubchich
+ (maintainer of `lawstat` package).
+
+# Installation
+```{r, eval=FALSE}
+library(devtools)
+install_github("toshi-ara/brunnermunzel")
+```
+
+# Example
+## Brunner-Munzel test
+```{r, message=FALSE}
+Y <- c(1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1)
+N <- c(3, 3, 4, 3, 1, 2, 3, 1, 1, 5, 4)
+
+dat <- data.frame(
+    value = c(Y, N),
+    group = factor(rep(c("Y", "N"), c(length(Y), length(N))),
+                   levels = c("Y", "N"))
+)
+
+library(brunnermunzel)
+
+## Default
+brunnermunzel.test(Y, N)
+
+## Formula interface
+brunnermunzel.test(value ~ group, data = dat)
+```
+
+## permuted Brunner-Munzel test
+
+`brunnermunzel.permutation.test` takes time to obtain results.
+
+```{r, message=FALSE}
+library(brunnermunzel)
+
+Y <- c(1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1)
+N <- c(3, 3, 4, 3, 1, 2, 3, 1, 1, 5, 4)
+
+dat <- data.frame(
+    value = c(Y, N),
+    group = factor(rep(c("Y", "N"), c(length(Y), length(N))),
+                   levels = c("Y", "N"))
+)
+
+## Default
+brunnermunzel.permutation.test(Y, N)
+
+## Formula interface
+brunnermunzel.permutation.test(value ~ group, data = dat)
+```
+
+### Comparison with other methods
+```{r, message=FALSE}
+# Wilcoxon sum-rank test
+wilcox.test(value ~ group, data = dat)
+
+# exact Wilcoxon sum-rank test
+library(coin)
+wilcox_test(value ~ group, data = dat, distribution = "exact")
+```
+
