@@ -22,7 +22,6 @@
       double precision dx(nx), dy(ny)
       double precision mx, my, vx, vy, v
 
-      external mean
       double precision mean
 
       call divide_groups(nx, ny, dat, idx, x, y, xy)

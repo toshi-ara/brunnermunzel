@@ -20,10 +20,6 @@
       double precision stat
       integer ini(r), idx(r)
 
-      external::nCr
-      external::calc_statistics
-      external::combination
-
       nx = r
       ny = n - r
       ini(1:r) = 0

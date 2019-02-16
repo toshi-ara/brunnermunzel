@@ -5,8 +5,6 @@
       double precision,intent(out)::rk(n)
       integer k,i,j
       integer idx(N)
-      ! qsort4 is a function in libR.so
-      external qsort4
 
       do i = 1, n
          idx(i) = i
