@@ -1,7 +1,7 @@
 Package: brunnermunzel
 Type: Package
 Title: Functions for (permuted) Brunner-Munzel test
-Version: 1.0.0
+Version: 1.0.1
 Date: 2019-02-17
 Authors@R: person("Toshiaki", "Ara", email = "toshiaki.ara@gmail.com",
   role = c("aut", "cre"))
