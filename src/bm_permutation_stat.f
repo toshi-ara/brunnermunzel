@@ -3,7 +3,7 @@
 *     calculation of statistics for Brunner-Munzel permutation test
 *
 *     (input)
-*     n    : length of data (combination of x and y groups)
+*     n    : length of data
 *     r    : length of provided data
 *     n_nCr: choose(n, r) in R function
 *     dat  : provided data (length is n)

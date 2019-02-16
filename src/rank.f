@@ -1,3 +1,13 @@
+*
+*     rank:
+*      rank function in R
+*
+*     (input)
+*     n  : length of data
+*     r  : length of data
+*     (output)
+*     rk : rank of each data
+*
       subroutine rank(n, x, rk)
       implicit none
       integer,intent(in)::n
