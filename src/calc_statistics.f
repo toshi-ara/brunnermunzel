@@ -11,10 +11,12 @@
 *
       subroutine calc_statistics(nx, ny, dat, idx, stat)
       implicit none
-      integer,intent(in)::nx, ny
-      double precision,intent(in)::dat(nx+ny)
-      integer,intent(in)::idx(nx)
-      double precision,intent(out)::stat
+      ! in
+      integer nx, ny
+      double precision dat(nx+ny)
+      integer idx(nx)
+      ! out
+      double precision stat
 
       integer i
       double precision x(nx), y(ny), xy(nx+ny)
@@ -71,10 +73,12 @@
 *
       subroutine divide_groups(nx, ny, dat, idx, x, y, xy)
       implicit none
-      integer,intent(in)::nx, ny
-      double precision,intent(in)::dat(nx + ny)
-      integer,intent(in)::idx(nx)
-      double precision,intent(out)::x(nx), y(ny), xy(nx + ny)
+      ! in
+      integer nx, ny
+      double precision dat(nx + ny)
+      integer idx(nx)
+      ! out
+      double precision x(nx), y(ny), xy(nx + ny)
       integer i, j, ix, iy
 
       ix = 1; iy = 1
@@ -104,8 +108,10 @@
 *
       double precision function mean(n, x)
       implicit none
-      integer,intent(in)::n
-      double precision,intent(in)::x(n)
+      ! in
+      integer n
+      double precision x(n)
+
       integer i
       double precision s
 
