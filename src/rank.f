@@ -1,3 +1,13 @@
+*
+*     rank:
+*      rank function in R
+*
+*     (input)
+*     n  : length of data
+*     r  : length of data
+*     (output)
+*     rk : rank of each data
+*
       subroutine rank(n, x, rk)
       implicit none
       integer,intent(in)::n
@@ -5,8 +15,6 @@
       double precision,intent(out)::rk(n)
       integer k,i,j
       integer idx(N)
-      ! qsort4 is a function in libR.so
-      external qsort4
 
       do i = 1, n
          idx(i) = i
