@@ -43,25 +43,3 @@
 
       return
       end subroutine combination
-
-
-*
-*     the same function of choose(n,r) in R
-*     by shikino (CC-BY-4.0)
-*
-      function nCr(n,r)
-      implicit none
-      integer,intent(in)::n,r
-      integer::i,r0,nCr
-
-      r0 = n - r
-      if (r.le.r0) r0 = r
-
-      nCr = 1
-      do i = 1, r0
-        nCr = nCr * (n - r0 + i)
-        nCr = nCr / i
-      enddo
-
-      return
-      end function nCr
