@@ -5,9 +5,12 @@
 *
       subroutine combination(n, r, ini, arr)
       implicit none
-      integer,intent(in)::n,r,ini(1:r)
-      integer,intent(inout)::arr(1:r)
-      integer::i,bef(1:r),numx,key(1:r)
+      ! in
+      integer n,r,ini(1:r)
+      ! out
+      integer arr(1:r)
+
+      integer i,bef(1:r),numx,key(1:r)
 
 !     Memory array to bef(1~r) before update in "(n-r+1)ary" picture.
       bef(1:r) = arr(1:r)-ini(1:r)

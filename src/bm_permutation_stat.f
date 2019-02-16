@@ -12,9 +12,11 @@
 *
       subroutine bm_permutation_stat(n, r, n_nCr, dat, statistics)
       implicit none
-      integer,intent(in)::n, r, n_nCr
-      double precision,intent(in)::dat(n)
-      double precision,intent(out)::statistics(n_nCr)
+      ! in
+      integer n, r, n_nCr
+      double precision dat(n)
+      !out
+      double precision statistics(n_nCr)
 
       integer::nx,ny,i,j
       double precision stat

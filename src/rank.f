@@ -10,9 +10,12 @@
 *
       subroutine rank(n, x, rk)
       implicit none
-      integer,intent(in)::n
-      double precision,intent(in)::x(n)
-      double precision,intent(out)::rk(n)
+      ! in
+      integer n
+      double precision x(n)
+      ! out
+      double precision rk(n)
+
       integer k,i,j
       integer idx(N)
 
