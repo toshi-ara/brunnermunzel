@@ -22,12 +22,12 @@
       integer i, ix, iy
       integer tmp(nx+1)  ! to avoid overflow
 
-      tmp(1:nx) = x
+      tmp(1:nx) = idx(1:nx)
       tmp(nx+1) = -1     ! to avoid overflow
 
       ix = 1; iy = 1
       do i = 1, nx + ny
-         if (i.eq.tmp(ix))) then
+         if (i.eq.tmp(ix)) then
             x(ix) = dat(i)
             ix = ix + 1
          else
