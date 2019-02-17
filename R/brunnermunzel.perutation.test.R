@@ -15,11 +15,9 @@ NULL
 #' Behrens-Fisher problem'',
 #' Computational Statistics and Data Analysis, Vol. 51, pp. 5192-5204 (2007).
 #'
-#' @seealso This function is made in reference to following cites (in Japanese):
+#' @seealso This function is made in reference to following cite (in Japanese):
 #' Prof. Haruhiko Okumura
-#' (\url{https://oku.edu.mie-u.ac.jp/~okumura/stat/brunner-munzel.html})
-#' and Anonymous
-#' (\url{https://blog.goo.ne.jp/r-de-r/e/83dc811baf41ecfe469fa794a4c51b84})
+#' (\url{https://oku.edu.mie-u.ac.jp/~okumura/stat/brunner-munzel.html}).
 #'
 #' @note FORTRAN subroutine `combination` in combination.f is derived from
 #' the program by shikino (\url{http://slpr.sakura.ne.jp/qp/combination})
@@ -30,7 +28,9 @@ NULL
 #' Y <- c(1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1)
 #' N <- c(3, 3, 4, 3, 1, 2, 3, 1, 1, 5, 4)
 #'
+#' \dontrun{
 #' brunnermunzel.permutation.test(Y, N)
+#' }
 #'
 #' ##       permuted Brunner-Munzel Test
 #' ##
@@ -45,7 +45,9 @@ NULL
 #'                    levels = c("Y", "N"))
 #' )
 #'
+#' \dontrun{
 #' brunnermunzel.permutation.test(value ~ group, data = dat)
+#' }
 #'
 #' ##       permuted Brunner-Munzel Test
 #' ##

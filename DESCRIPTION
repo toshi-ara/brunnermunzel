@@ -1,6 +1,6 @@
 Package: brunnermunzel
 Type: Package
-Title: Functions for (permuted) Brunner-Munzel test
+Title: Functions for (Permuted) Brunner-Munzel test
 Version: 1.0.1
 Date: 2019-02-17
 Authors@R: person("Toshiaki", "Ara", email = "toshiaki.ara@gmail.com",
