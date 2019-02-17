@@ -29,7 +29,9 @@
       do
          j = i
          do
-            if ((j.lt.n).and.(x(j).eq.x(j + 1))) then
+            if (j.ge.n) then
+               exit
+            else if (x(j).eq.x(j + 1)) then
                j = j + 1
             else
                exit
