@@ -18,9 +18,7 @@
 
       integer k,i,j
       integer idx(N)
-      integer tmp(n+1)          ! to avoid overflow
 
-      tmp(1:(n+1)) = (/idx(1:n), -1/)
       do i = 1, n
          idx(i) = i
       enddo
@@ -31,7 +29,7 @@
       do
          j = i
          do
-            if ((j.lt.n).and.(tmp(j).eq.tmp(j + 1))) then
+            if ((j.lt.n).and.(x(j).eq.x(j + 1))) then
                j = j + 1
             else
                exit
