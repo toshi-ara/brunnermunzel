@@ -61,9 +61,7 @@ Thanks to shikono for your useful subroutine.
 Y <- c(1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1)
 N <- c(3, 3, 4, 3, 1, 2, 3, 1, 1, 5, 4)
 
-\dontrun{
 brunnermunzel.permutation.test(Y, N)
-}
 
 ##       permuted Brunner-Munzel Test
 ##
@@ -78,9 +76,7 @@ dat <- data.frame(
                    levels = c("Y", "N"))
 )
 
-\dontrun{
 brunnermunzel.permutation.test(value ~ group, data = dat)
-}
 
 ##       permuted Brunner-Munzel Test
 ##
