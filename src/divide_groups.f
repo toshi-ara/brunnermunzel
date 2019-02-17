@@ -20,11 +20,9 @@
       double precision x(nx), y(ny), xy(nx + ny)
 
       integer i, ix, iy
-      integer tmp(nx+1)  ! to avoid overflow
+      integer tmp(nx+1)         ! to avoid overflow
 
-      tmp(1:nx) = idx(1:nx)
-      tmp(nx+1) = -1     ! to avoid overflow
-
+      tmp(1:(nx+1)) = (/idx(1:nx), -1/)
       ix = 1; iy = 1
       do i = 1, nx + ny
          if (i.eq.tmp(ix)) then
@@ -36,7 +34,7 @@
          end if
       enddo
 
-      xy(1:nx) = x
-      xy(nx+1:nx+ny) = y
+      xy(1:nx) = x(1:nx)
+      xy((nx+1):(nx+ny)) = y(1:ny)
       return
       end
