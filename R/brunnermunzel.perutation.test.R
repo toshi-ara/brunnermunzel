@@ -59,7 +59,6 @@ brunnermunzel.permutation.test <-  function(x, ...)
 #' @rdname brunnermunzel.permutation.test
 #' @method brunnermunzel.permutation.test default
 #'
-#' @importFrom utils combn
 #' @importFrom stats setNames terms
 #'
 #' @param x the numeric vector of data values from the sample 1.
