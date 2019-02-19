@@ -21,9 +21,17 @@
       integer::nx,ny,i,j
       double precision stat
       integer ini(r), idx(r)
+      double precision const(4)
 
       nx = r
       ny = n - r
+
+!     constant value (from nx and ny) to avoid multiple calculation
+      const(1) = (nx + 1) * 0.5
+      const(2) = (ny + 1) * 0.5
+      const(3) = 1.0 / (nx - 1)
+      const(4) = 1.0 / (ny - 1)
+
       ini(1:r) = 0
       idx(1:r) = 0
 
@@ -33,7 +41,7 @@
       idx(1:r) = ini(1:r)
 
       do i = 1, n_nCr
-         call calc_statistics(nx, ny, dat, idx, stat)
+         call calc_statistics(nx, ny, dat, const, idx, stat)
          statistics(i) = stat
          call combination(n, r, ini, idx)
       enddo

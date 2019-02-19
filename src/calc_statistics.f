@@ -5,15 +5,21 @@
 *     (input)
 *     nx, ny: length of x or y groups
 *     dat   : provided data (length is n)
+*     const : constant value (from nx and ny) to avoid multiple calculation
+*         const(1) = (nx + 1) * 0.5
+*         const(2) = (ny + 1) * 0.5
+*         const(3) = 1.0 / (nx - 1)
+*         const(4) = 1.0 / (ny - 1)
 *     idx   : index for 'group x' (length is nx)
 *     (output)
 *     stat  : statistics
 *
-      subroutine calc_statistics(nx, ny, dat, idx, stat)
+      subroutine calc_statistics(nx, ny, dat, const, idx, stat)
       implicit none
       ! in
       integer nx, ny
       double precision dat(nx+ny)
+      double precision const(4)
       integer idx(nx)
       ! out
       double precision stat
@@ -34,19 +40,19 @@
       mx = mean(nx, rkxy(1:nx))
       my = mean(ny, rkxy(nx+1:nx+ny))
 
-      dx = (rkxy(1:nx) - rkx - mx + (nx + 1) / 2.0)**2
-      dy = (rkxy(nx+1:nx+ny) - rky - my + (ny + 1) / 2.0)**2
+      dx = (rkxy(1:nx) - rkx - mx + const(1))**2
+      dy = (rkxy(nx+1:nx+ny) - rky - my + const(2))**2
 
       vx = 0; vy = 0
       do i = 1, nx
          vx = vx + dx(i)
       enddo
-      vx = vx / (nx - 1)
+      vx = vx * const(3)   ! vx = vx / (nx - 1)
 
       do i = 1, ny
          vy = vy + dy(i)
       enddo
-      vy = vy / (ny - 1)
+      vy = vy * const(4)   ! vy = vy / (ny - 1)
 
       v = nx * vx + ny * vy
       ! to avoid division by zero
