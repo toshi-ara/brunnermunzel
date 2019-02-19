@@ -16,19 +16,17 @@
 *
       subroutine calc_statistics(nx, ny, dat, const, idx, stat)
       implicit none
-      ! in
-      integer nx, ny
-      double precision dat(nx+ny)
-      double precision const(4)
-      integer idx(nx)
-      ! out
-      double precision stat
+      integer,intent(in)::nx,ny
+      double precision,intent(in)::dat(nx+ny)
+      double precision,intent(in)::const(4)
+      integer,intent(in)::idx(nx)
+      double precision,intent(out)::stat
 
       integer i
-      double precision x(nx), y(ny), xy(nx+ny)
-      double precision rkx(nx), rky(ny), rkxy(nx+ny)
-      double precision dx(nx), dy(ny)
-      double precision mx, my, vx, vy, v
+      double precision x(nx),y(ny),xy(nx+ny)
+      double precision rkx(nx),rky(ny),rkxy(nx+ny)
+      double precision dx(nx),dy(ny)
+      double precision mx,my,vx,vy,v
 
       double precision mean
 
@@ -72,9 +70,8 @@
 *
       double precision function mean(n, x)
       implicit none
-      ! in
-      integer n
-      double precision x(n)
+      integer,intent(in)::n
+      double precision,intent(in)::x(n)
 
       integer i
       double precision s

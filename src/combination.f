@@ -5,10 +5,8 @@
 *
       subroutine combination(n, r, ini, arr)
       implicit none
-      ! in
-      integer n,r,ini(1:r)
-      ! out
-      integer arr(1:r)
+      integer,intent(in)::n,r,ini(1:r)
+      integer,intent(inout)::arr(1:r)
 
 !     sikinote
 !
