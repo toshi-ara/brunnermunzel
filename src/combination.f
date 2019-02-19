@@ -5,11 +5,26 @@
 *
       subroutine combination(n, r, ini, arr)
       implicit none
-      ! in
-      integer n,r,ini(1:r)
-      ! out
-      integer arr(1:r)
+      integer,intent(in)::n,r,ini(1:r)
+      integer,intent(inout)::arr(1:r)
 
+!     sikinote
+!
+!     Update array "arr"
+!     Example{n = 6 (maximun number)
+!             r = 4 (column of "ini" and "arr" array)
+!             ini(1)~ini(4) = 1,2,3,4 (initial number of combination)
+!             arr(1)~arr(4) (array what you want to update)}
+!
+!     - If you input   arr(1)~arr(4) = 1,2,3,4
+!          will update arr(1)~arr(4) = 1,2,3,5
+!
+!     - If you input   arr(1)~arr(4) = 1,3,5,6
+!          will update arr(1)~arr(4) = 1,4,5,6
+!
+!     - If you input   arr(1)~arr(4) = 1,4,5,6
+!          will update arr(1)~arr(4) = 2,3,4,5
+!
       integer i,bef(1:r),numx,key(1:r)
 
 !     Memory array to bef(1~r) before update in "(n-r+1)ary" picture.
