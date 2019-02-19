@@ -17,7 +17,8 @@
       double precision rk(n)
 
       integer k,i,j
-      integer idx(N)
+      integer idx(n)
+      double precision averank
 
       do i = 1, n
          idx(i) = i
@@ -38,8 +39,9 @@
             endif
          enddo
 
+         averank = (i + j) * 0.5
          do k = i, j
-            rk(idx(k)) = (i + j) / 2.0
+            rk(idx(k)) = averank
          enddo
 
          i = j + 1
