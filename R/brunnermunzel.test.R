@@ -144,7 +144,8 @@ brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 #' @importFrom stats na.omit pt qt
 #'
 #' @param x the numeric vector of data values from the sample 1,
-#'  or 2 x m matrix ot table (column is ordinal variables)
+#'  or 2 x n matrix of table
+#' (number of row must be 2 and column is ordinal variables).
 #' @param y the numeric vector of data values from the sample 2.
 #'  If x is matrix or table, y must be missing.
 #' @param alpha significance level, default is 0.05 for 95\% confidence

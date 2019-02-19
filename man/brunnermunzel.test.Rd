@@ -21,7 +21,8 @@ brunnermunzel.test(x, ...)
 }
 \arguments{
 \item{x}{the numeric vector of data values from the sample 1,
-or 2 x m matrix ot table (column is ordinal variables)}
+ or 2 x n matrix of table
+(number of row must be 2 and column is ordinal variables).}
 
 \item{\dots}{further arguments to be passed to or from methods
 (This argument is for only formula).}
@@ -92,8 +93,9 @@ brunnermunzel.test(x, y)
 ## 95 percent confidence interval:
 ##  -0.02962941  0.59753064
 ## sample estimates:
-## P(X<Y)+.5*P(X=Y) 
-##        0.2839506 
+## P(X<Y)+.5*P(X=Y)
+##        0.2839506
+
 
 ## Formula interface.
 dat <- data.frame(
@@ -155,7 +157,7 @@ brunnermunzel.test(value ~ group, data = dat)
 
 
 ## Matrix or Table interface.
-## 
+##
 dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
 dat2 <- as.table(dat1)
 
