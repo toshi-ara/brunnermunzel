@@ -26,12 +26,13 @@
       nx = r
       ny = n - r
 
-!     constant value (from nx and ny) to avoid multiple calculation
+!     constant values (from nx and ny) to avoid multiple calculation
       const(1) = (nx + 1) * 0.5
       const(2) = (ny + 1) * 0.5
       const(3) = nx * 1.0 / (nx - 1)
       const(4) = ny * 1.0 / (ny - 1)
 
+!     variables to use 'combination' subroutine
       ini(1:r) = 0
       idx(1:r) = 0
 
@@ -40,6 +41,7 @@
       enddo
       idx(1:r) = ini(1:r)
 
+! start analysis (get statistics in all combinations)
       do i = 1, n_nCr
          call calc_statistics(nx, ny, dat, const, idx, stat)
          statistics(i) = stat

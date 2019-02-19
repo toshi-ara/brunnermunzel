@@ -14,7 +14,7 @@
 !
 !     Update array "arr"
 !     Example{n = 6 (maximun number)
-!             r = 4(column of "ini" and "arr" array)
+!             r = 4 (column of "ini" and "arr" array)
 !             ini(1)~ini(4) = 1,2,3,4 (initial number of combination)
 !             arr(1)~arr(4) (array what you want to update)}
 !
