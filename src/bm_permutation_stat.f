@@ -33,9 +33,6 @@
       const(4) = ny * 1.0 / (ny - 1)
 
 !     variables to use 'combination' subroutine
-      ini(1:r) = 0
-      idx(1:r) = 0
-
       do j = 1,r
          ini(j) = j
       enddo
