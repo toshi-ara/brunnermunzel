@@ -16,7 +16,7 @@
       ! out
       double precision rk(n)
 
-      integer k,i,j
+      integer i,j,k
       integer idx(n)
       double precision averank
 
@@ -44,10 +44,10 @@
             rk(idx(k)) = averank
          enddo
 
-         i = j + 1
-         if (i.gt.n) then
+         if (j.eq.n) then
             exit
          endif
+         i = j + 1
       enddo
 
       return
