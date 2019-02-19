@@ -29,8 +29,8 @@
 !     constant value (from nx and ny) to avoid multiple calculation
       const(1) = (nx + 1) * 0.5
       const(2) = (ny + 1) * 0.5
-      const(3) = 1.0 / (nx - 1)
-      const(4) = 1.0 / (ny - 1)
+      const(3) = nx * 1.0 / (nx - 1)
+      const(4) = ny * 1.0 / (ny - 1)
 
       ini(1:r) = 0
       idx(1:r) = 0

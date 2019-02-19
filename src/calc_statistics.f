@@ -8,8 +8,8 @@
 *     const : constant value (from nx and ny) to avoid multiple calculation
 *         const(1) = (nx + 1) * 0.5
 *         const(2) = (ny + 1) * 0.5
-*         const(3) = 1.0 / (nx - 1)
-*         const(4) = 1.0 / (ny - 1)
+*         const(3) = nx * 1.0 / (nx - 1)
+*         const(4) = ny * 1.0 / (ny - 1)
 *     idx   : index for 'group x' (length is nx)
 *     (output)
 *     stat  : statistics
@@ -47,14 +47,12 @@
       do i = 1, nx
          vx = vx + dx(i)
       enddo
-      vx = vx * const(3)   ! vx = vx / (nx - 1)
 
       do i = 1, ny
          vy = vy + dy(i)
       enddo
-      vy = vy * const(4)   ! vy = vy / (ny - 1)
 
-      v = nx * vx + ny * vy
+      v = const(3) * vx + const(4) * vy
       ! to avoid division by zero
       if (v.lt.0.000001) then
          v = 0.00001
