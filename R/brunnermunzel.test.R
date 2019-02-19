@@ -42,8 +42,9 @@
 #' ## 95 percent confidence interval:
 #' ##  -0.02962941  0.59753064
 #' ## sample estimates:
-#' ## P(X<Y)+.5*P(X=Y) 
-#' ##        0.2839506 
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##        0.2839506
+#'
 #'
 #' ## Formula interface.
 #' dat <- data.frame(
@@ -103,7 +104,38 @@
 #' ## P(X<Y)+.5*P(X=Y)
 #' ##         0.788961
 #'
+#'
+#' ## Matrix or Table interface.
+#' ##
+#' dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
+#' dat2 <- as.table(dat1)
+#'
+#' brunnermunzel.test(dat1)  # matrix
+#'
+#' ##       Brunner-Munzel Test
+#' ## data:  Group1 and Group2
+#' ## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
+#' ## 0.1393
+#' ## 95 percent confidence interval:
+#' ##  0.4351213 0.9248787
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##             0.68
+#'
+#' brunnermunzel.test(dat2)  # table
+#'
+#' ##       Brunner-Munzel Test
+#' ## data:  A and B
+#' ## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
+#' ## 0.1393
+#' ## 95 percent confidence interval:
+#' ##  0.4351213 0.9248787
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##             0.68
+#'
 #' @export
+#'
 brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 
 #' @rdname brunnermunzel.test
@@ -111,8 +143,10 @@ brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 #'
 #' @importFrom stats na.omit pt qt
 #'
-#' @param x the numeric vector of data values from the sample 1.
+#' @param x the numeric vector of data values from the sample 1,
+#'  or 2 x m matrix ot table (column is ordinal variables)
 #' @param y the numeric vector of data values from the sample 2.
+#'  If x is matrix or table, y must be missing.
 #' @param alpha significance level, default is 0.05 for 95\% confidence
 #' interval.
 #' @param alternative a character string specifying the alternative
@@ -226,3 +260,43 @@ brunnermunzel.test.formula <-
     y$data.name <- DNAME
     y
 }
+
+
+#' @rdname brunnermunzel.test
+#' @method brunnermunzel.test matrix
+#'
+#' @export
+#'
+brunnermunzel.test.matrix <- function(x, ...) {
+    if (!is.matrix(x)) {
+        stop("Class of data must be 'matrix' or 'table'")
+    }
+
+    if (nrow(x) != 2L) {
+        stop("Number of rows must be 2")
+    }
+
+    rname <- rownames(x)
+    if (is.null(rname)) {
+        rname <- c("Group1", "Group2")
+    }
+    DNAME <- paste(rname, collapse = " and ")
+
+    level <- seq_len(ncol(x))
+    g1 <- rep(level, x[1,])
+    g2 <- rep(level, x[2,])
+
+    z <- do.call("brunnermunzel.test", c(list(g1, g2, ...)))
+    z$data.name <- DNAME
+    z
+}
+
+#' @rdname brunnermunzel.test
+#' @method brunnermunzel.test table
+#'
+#' @export
+#'
+brunnermunzel.test.table <- function(x, ...) {
+    brunnermunzel.test.matrix(x, ...)
+}
+

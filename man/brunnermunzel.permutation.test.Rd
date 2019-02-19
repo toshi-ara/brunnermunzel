@@ -4,6 +4,8 @@
 \alias{brunnermunzel.permutation.test}
 \alias{brunnermunzel.permutation.test.default}
 \alias{brunnermunzel.permutation.test.formula}
+\alias{brunnermunzel.permutation.test.matrix}
+\alias{brunnermunzel.permutation.test.table}
 \title{permuted Brunner-Munzel test}
 \usage{
 brunnermunzel.permutation.test(x, ...)
@@ -13,14 +15,20 @@ brunnermunzel.permutation.test(x, ...)
 
 \method{brunnermunzel.permutation.test}{formula}(formula, data, subset,
   na.action, ...)
+
+\method{brunnermunzel.permutation.test}{matrix}(x, ...)
+
+\method{brunnermunzel.permutation.test}{table}(x, ...)
 }
 \arguments{
-\item{x}{the numeric vector of data values from the sample 1.}
+\item{x}{the numeric vector of data values from the sample 1,
+or 2 x m matrix ot table (column is ordinal variables)}
 
 \item{\dots}{further arguments to be passed to or from methods
 (This argument is for only formula).}
 
-\item{y}{the numeric vector of data values from the sample 2.}
+\item{y}{the numeric vector of data values from the sample 2.
+If x is matrix or table, y must be missing.}
 
 \item{alternative}{a character string specifying the alternative
 hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
@@ -119,6 +127,28 @@ brunnermunzel.permutation.test(value ~ group, data = dat)
 ##
 ## data:  value by group
 ## p-value = 0.008038
+
+
+## Matrix or Table interface.
+##
+dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
+dat2 <- as.table(dat1)
+
+brunnermunzel.permutation.test(dat1)  # matrix
+
+##       permuted Brunner-Munzel Test
+##
+## data:  Group1 and Group2
+## p-value = 0.1593
+
+brunnermunzel.permutation.test(dat2)  # table
+
+##       Brunner-Munzel Test
+##
+##       permuted Brunner-Munzel Test
+##
+## data:  A and B
+## p-value = 0.1593
 
 }
 \references{

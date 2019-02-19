@@ -4,6 +4,8 @@
 \alias{brunnermunzel.test}
 \alias{brunnermunzel.test.default}
 \alias{brunnermunzel.test.formula}
+\alias{brunnermunzel.test.matrix}
+\alias{brunnermunzel.test.table}
 \title{brunnermunzel.test}
 \usage{
 brunnermunzel.test(x, ...)
@@ -12,14 +14,20 @@ brunnermunzel.test(x, ...)
   "greater", "less"), alpha = 0.05, ...)
 
 \method{brunnermunzel.test}{formula}(formula, data, subset, na.action, ...)
+
+\method{brunnermunzel.test}{matrix}(x, ...)
+
+\method{brunnermunzel.test}{table}(x, ...)
 }
 \arguments{
-\item{x}{the numeric vector of data values from the sample 1.}
+\item{x}{the numeric vector of data values from the sample 1,
+or 2 x m matrix ot table (column is ordinal variables)}
 
 \item{\dots}{further arguments to be passed to or from methods
 (This argument is for only formula).}
 
-\item{y}{the numeric vector of data values from the sample 2.}
+\item{y}{the numeric vector of data values from the sample 2.
+If x is matrix or table, y must be missing.}
 
 \item{alternative}{a character string specifying the alternative
 hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
@@ -144,6 +152,36 @@ brunnermunzel.test(value ~ group, data = dat)
 ## sample estimates:
 ## P(X<Y)+.5*P(X=Y)
 ##         0.788961
+
+
+## Matrix or Table interface.
+## 
+dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
+dat2 <- as.table(dat1)
+
+brunnermunzel.test(dat1)  # matrix
+
+##       Brunner-Munzel Test
+## data:  Group1 and Group2
+## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
+## 0.1393
+## 95 percent confidence interval:
+##  0.4351213 0.9248787
+## sample estimates:
+## P(X<Y)+.5*P(X=Y)
+##             0.68
+
+brunnermunzel.test(dat2)  # table
+
+##       Brunner-Munzel Test
+## data:  A and B
+## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
+## 0.1393
+## 95 percent confidence interval:
+##  0.4351213 0.9248787
+## sample estimates:
+## P(X<Y)+.5*P(X=Y)
+##             0.68
 
 }
 \seealso{
