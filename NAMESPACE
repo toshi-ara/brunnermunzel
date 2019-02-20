@@ -2,8 +2,12 @@
 
 S3method(brunnermunzel.permutation.test,default)
 S3method(brunnermunzel.permutation.test,formula)
+S3method(brunnermunzel.permutation.test,matrix)
+S3method(brunnermunzel.permutation.test,table)
 S3method(brunnermunzel.test,default)
 S3method(brunnermunzel.test,formula)
+S3method(brunnermunzel.test,matrix)
+S3method(brunnermunzel.test,table)
 export(brunnermunzel.permutation.test)
 export(brunnermunzel.test)
 importFrom(stats,na.omit)

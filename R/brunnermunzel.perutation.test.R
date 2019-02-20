@@ -87,6 +87,28 @@ NULL
 #' ## data:  value by group
 #' ## p-value = 0.008038
 #'
+#'
+#' ## Matrix or Table interface.
+#' ##
+#' dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
+#' dat2 <- as.table(dat1)
+#'
+#' brunnermunzel.permutation.test(dat1)  # matrix
+#'
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  Group1 and Group2
+#' ## p-value = 0.1593
+#'
+#' brunnermunzel.permutation.test(dat2)  # table
+#'
+#' ##       Brunner-Munzel Test
+#' ##
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  A and B
+#' ## p-value = 0.1593
+#'
 #' @export
 #'
 brunnermunzel.permutation.test <-  function(x, ...)
@@ -98,8 +120,10 @@ brunnermunzel.permutation.test <-  function(x, ...)
 #'
 #' @importFrom stats setNames terms
 #'
-#' @param x the numeric vector of data values from the sample 1.
+#' @param x the numeric vector of data values from the sample 1,
+#'  or 2 x m matrix ot table (column is ordinal variables)
 #' @param y the numeric vector of data values from the sample 2.
+#'  If x is matrix or table, y must be missing.
 #' @param alternative a character string specifying the alternative
 #' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 #' \code{"less"}. User can specify just the initial letter.
@@ -187,3 +211,45 @@ brunnermunzel.permutation.test.formula <-
     y$data.name <- DNAME
     y
 }
+
+
+#' @rdname brunnermunzel.permutation.test
+#' @method brunnermunzel.permutation.test matrix
+#'
+#' @export
+#'
+brunnermunzel.permutation.test.matrix <- function(x, ...) {
+    if (!is.matrix(x)) {
+        stop("Class of data must be 'matrix' or 'table'")
+    }
+
+    if (nrow(x) != 2L) {
+        stop("Number of rows must be 2")
+    }
+
+    rname <- rownames(x)
+    if (is.null(rname)) {
+        rname <- c("Group1", "Group2")
+    }
+    DNAME <- paste(rname, collapse = " and ")
+
+    lv <- seq_len(ncol(x))
+    g1 <- rep(lv, x[1,])
+    g2 <- rep(lv, x[2,])
+
+    z <- do.call("brunnermunzel.permutation.test",
+                 c(list(g1, g2, ...)))
+    z$data.name <- DNAME
+    z
+}
+
+
+#' @rdname brunnermunzel.permutation.test
+#' @method brunnermunzel.permutation.test table
+#'
+#' @export
+#'
+brunnermunzel.permutation.test.table <- function(x, ...) {
+    brunnermunzel.permutation.test.matrix(x, ...)
+}
+
