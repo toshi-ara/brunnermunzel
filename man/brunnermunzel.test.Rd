@@ -92,8 +92,9 @@ brunnermunzel.test(x, y)
 ## 95 percent confidence interval:
 ##  -0.02962941  0.59753064
 ## sample estimates:
-## P(X<Y)+.5*P(X=Y) 
-##        0.2839506 
+## P(X<Y)+.5*P(X=Y)
+##        0.2839506
+
 
 ## Formula interface.
 dat <- data.frame(
@@ -155,7 +156,7 @@ brunnermunzel.test(value ~ group, data = dat)
 
 
 ## Matrix or Table interface.
-## 
+##
 dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
 dat2 <- as.table(dat1)
 
