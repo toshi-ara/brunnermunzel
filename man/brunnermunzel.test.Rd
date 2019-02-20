@@ -21,7 +21,8 @@ brunnermunzel.test(x, ...)
 }
 \arguments{
 \item{x}{the numeric vector of data values from the sample 1,
-or 2 x m matrix ot table (column is ordinal variables)}
+ or 2 x n matrix of table
+(number of row must be 2 and column is ordinal variables).}
 
 \item{\dots}{further arguments to be passed to or from methods
 (This argument is for only formula).}
