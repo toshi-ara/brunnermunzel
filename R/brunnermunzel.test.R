@@ -191,7 +191,7 @@ brunnermunzel.test.default <-
                    pt(statistic, dfbm, lower.tail = FALSE)
                )
 
-    conf.int <- pst + c(-1, 1) * qt(1 - alpha/2, dfbm) *
+    conf.int <- pst + c(-1, 1) * qt(alpha/2, dfbm, lower.tail = FALSE) *
         sqrt(v1/(n1 * n2^2) + v2/(n2 * n1^2))
 
     ESTIMATE <- pst
