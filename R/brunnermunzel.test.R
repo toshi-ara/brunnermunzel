@@ -183,8 +183,7 @@ brunnermunzel.test.default <-
     p.value <-
         switch(alternative,
                "two.sided" =
-                   2 * min(pt(abs(statistic), dfbm),
-                           pt(abs(statistic), dfbm, lower.tail = FALSE)),
+                   pt(abs(statistic), dfbm, lower.tail = FALSE) * 2,
                "greater" =
                    pt(statistic, dfbm),
                "less" =
