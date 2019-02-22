@@ -128,12 +128,21 @@ brunnermunzel.permutation.test <-  function(x, ...)
 #' @param alternative a character string specifying the alternative
 #' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 #' \code{"less"}. User can specify just the initial letter.
+#' @param force
+#'   \describe{
+#'    \item{FALSE}{(default): If sample size is too large
+#'      [number of combinations > 40116600 = choose(28, 14)],
+#'      use \code{brunnermunzel.test}.}
+#'    \item{TRUE}{: perform permuted Brunner-Munzel test
+#'      regardless sample size.}
+#'   }
 #'
 #' @export
 #'
 brunnermunzel.permutation.test.default <-
     function(x, y,
              alternative = c("two.sided", "greater", "less"),
+             force = FALSE,
              ...) {
         alternative <- match.arg(alternative)
         DNAME <-  paste(deparse(substitute(x)), "and",
@@ -142,6 +151,15 @@ brunnermunzel.permutation.test.default <-
         nx <- length(x); ny <- length(y)
         if (nx == 1 || ny == 1) stop("not enough observations")
         n_nCr <- choose(nx + ny, nx)
+
+        # switch brunnermunzel.test
+        #  when sample number is too large
+        if (!force && (n_nCr > 40116600)) { # choose(28, 14)
+            warning(c("Sample number is too large. ",
+                      "Using 'brunnermunzel.test'\n"))
+            res <- brunnermunzel.test(x, y, alternative = alternative)
+            return(res)
+        }
 
         res <- .Fortran("bm_permutation_stat",
                         n = as.integer(nx + ny),
