@@ -11,7 +11,7 @@
 brunnermunzel.permutation.test(x, ...)
 
 \method{brunnermunzel.permutation.test}{default}(x, y,
-  alternative = c("two.sided", "greater", "less"), ...)
+  alternative = c("two.sided", "greater", "less"), force = FALSE, ...)
 
 \method{brunnermunzel.permutation.test}{formula}(formula, data, subset,
   na.action, ...)
@@ -34,6 +34,14 @@ If x is matrix or table, y must be missing.}
 \item{alternative}{a character string specifying the alternative
 hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 \code{"less"}. User can specify just the initial letter.}
+
+\item{force}{\describe{
+ \item{FALSE}{(default): If sample size is too large
+   [number of combinations > 40116600 = choose(28, 14)],
+   use \code{brunnermunzel.test}.}
+ \item{TRUE}{: perform permuted Brunner-Munzel test
+   regardless sample size.}
+}}
 
 \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
 is a numeric variable giving the data values and \code{rhs} a factor
