@@ -1,6 +1,7 @@
 *
 *     bm_permutation_stat:
 *     calculation of statistics for Brunner-Munzel permutation test
+*     Recursive version
 *
 *     (input)
 *     n    : length of data
@@ -16,13 +17,16 @@
       double precision,intent(in)::dat(n)
       double precision,intent(out)::statistics(n_nCr)
 
-      integer::nx,ny,i,j
-      double precision stat
-      integer ini(r),idx(r)
+!     variables for recursive subroutine
+      integer idx(r)
+      integer nest,column
+      integer cnt
+
+!     variables for calculation of statistics
+      integer nx,ny
       double precision const(4)
 
-      nx = r
-      ny = n - r
+      nx = r; ny = n - r
 
 !     constant values (from nx and ny) to avoid multiple calculation
       const(1) = (nx + 1) * 0.5
@@ -30,17 +34,34 @@
       const(3) = nx * 1.0 / (nx - 1)
       const(4) = ny * 1.0 / (ny - 1)
 
-!     variables to use 'combination' subroutine
-      do j = 1,r
-         ini(j) = j
-      enddo
-      idx(1:r) = ini(1:r)
-
-! start analysis (get statistics in all combinations)
-      do i = 1, n_nCr
-         call calc_statistics(nx, ny, dat, const, idx, stat)
-         statistics(i) = stat
-         call combination(n, r, ini, idx)
-      enddo
+!     initial setting
+      nest = 0; column = 1
+      cnt = 1
+      call nest0(nest, column, nx, ny, idx, nest0)
       return
+
+      contains
+      subroutine nest0(nest, column, n1, n2, idx, nest1)
+      integer,intent(in)::nest,column,n1,n2
+      integer,intent(out)::idx(n1)
+      external nest1
+      external calc_statistics
+
+      integer i
+      double precision stat
+
+      do i = nest + 1, n2 + column
+         idx(column) = i
+         if (column.ne.n1) then
+            call nest1(i, column + 1, n1, n2, idx, nest1)
+         else
+            call calc_statistics(nx, ny, dat, const, idx, stat)
+            statistics(cnt) = stat
+            cnt = cnt + 1
+         end if
+      end do
+
+      return
+      end subroutine nest0
+
       end
