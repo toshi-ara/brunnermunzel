@@ -11,7 +11,7 @@
 brunnermunzel.test(x, ...)
 
 \method{brunnermunzel.test}{default}(x, y, alternative = c("two.sided",
-  "greater", "less"), alpha = 0.05, ...)
+  "greater", "less"), alpha = 0.05, perm = FALSE, ...)
 
 \method{brunnermunzel.test}{formula}(formula, data, subset, na.action, ...)
 
@@ -36,6 +36,11 @@ hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 
 \item{alpha}{significance level, default is 0.05 for 95\% confidence
 interval.}
+
+\item{perm}{\describe{
+ \item{FALSE}{(default): perform Brunner-Munzel test.}
+ \item{TRUE}{: perform permuted Brunner-Munzel test.}
+}}
 
 \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
 is a numeric variable giving the data values and \code{rhs} a factor
