@@ -153,14 +153,25 @@ brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 #' @param alternative a character string specifying the alternative
 #' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 #' \code{"less"}. User can specify just the initial letter.
+#' @param perm
+#'   \describe{
+#'    \item{FALSE}{(default): perform Brunner-Munzel test.}
+#'    \item{TRUE}{: perform permuted Brunner-Munzel test.}
+#'   }
 #'
 #' @export
 #'
 brunnermunzel.test.default <-
     function (x, y,
               alternative = c("two.sided", "greater", "less"),
-              alpha = 0.05, ...)
+              alpha = 0.05, perm = FALSE, ...)
 {
+    if (perm) {
+        res <- brunnermunzel.permutation.test(x, y,
+                                              alternative = alternative, ...)
+        return(res)
+    }
+
     alternative <- match.arg(alternative)
     DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
