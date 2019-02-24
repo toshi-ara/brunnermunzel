@@ -13,4 +13,6 @@ URL: https://github.com/toshi-ara/brunnermunzel
 BugReports: https://github.com/toshi-ara/brunnermunzel/issues/
 RoxygenNote: 6.1.1
 Suggests: 
-    testthat
+    testthat, knitr, rmarkdown, dplyr, ggplot2
+VignetteBuilder:
+    knitr, dplyr, ggplot2
