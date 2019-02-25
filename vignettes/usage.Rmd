@@ -23,13 +23,13 @@ This `brunnermunzel` package is to perform (permuted) Brunner-Munzel test
  for stochastic equality of two samples,
  which is also known as the Generalized Wilcoxon test.
 
-For Brunner-Munzel test [@ref:1],
+For **Brunner-Munzel test** [@ref:1],
 `brunner.munzel.test` function in `lawstat` package is very famous.
 This function is extended to enable
  to use **formula**, **matrix**, and **table** as an argument.
 
 Also, the function `brunnermunzel.permutation.test`
- for permuted Brunner-Munzel test [@ref:2] was provided.
+ for **permuted Brunner-Munzel test** [@ref:2] was provided.
 
 # Usage of functions in `brunnermunzel` package
 ## Default and Formula class
@@ -82,18 +82,19 @@ brunnermunzel.test(value ~ group, data = dat)
 
 #### analysis with permuted Brunner-Munzel test
 To perform permuted Brunner-Munzel test,
- use `brunnermunzel.test` with `perm = TRUE` option,
+ use `brunnermunzel.test` with "`perm = TRUE`" option,
  or `brunnermunzel.permutation.test` function.
-This option is used in also formula interface, matrix, and table.
+This "`perm`" option is used in also formula interface, matrix, and table.
+
+When `perm` is `TRUE`,
+ `brunnermunzel.test` calls
+ `brunnermunzel.permutation.test` in internal.
 
 ```{r, message=FALSE}
-library(brunnermunzel)
-
 brunnermunzel.test(x, y, perm = TRUE)
 
 brunnermunzel.permutation.test(x, y)
 ```
-
 
 Because statistics in all combinations are calculated
  in permuted Brunner-Munzel test
@@ -115,7 +116,7 @@ brunnermunzel.permutation.test(1:15, 3:17)
 
 When you want to perform permuted Brunner-Munzel test
  regardless sample size,
- you add `force = TRUE` option to `brunnermunzel.permutation test`.
+ you add "`force = TRUE`" option to `brunnermunzel.permutation test`.
 
 ```{r, eval=FALSE}
 brunnermunzel.permutation.test(1:15, 3:17, force = TRUE)
@@ -128,13 +129,23 @@ brunnermunzel.permutation.test(1:15, 3:17, force = TRUE)
 
 #### using `alternative` option
 
-`brunnermunzel.test` also can use `alternative` option
+`brunnermunzel.test` also can use "`alternative`" option
  as well as `t.test` and `wilcox.test` functions.
 
+To test whether the average rank of group $x$ is greater
+ than that of group $y$,
+ `alternative = "greater"` option is added.
+In contrast,
+ to test whether the average rank of group $x$ is lesser
+ than that of group $y$,
+ `alternative = "less"` option is added.
+
+The results of Brunner-Munzel test and
+ Wilcoxon sum-rank test (Mann-Whitney test)
+ with `alternative = "greater"` option are shown.
 In this case,
- mean of $x$ is `r round(mean(x), 2)`, and
- mean of $y$ is `r round(mean(y), 2)`
- ($\overline{x} > \overline{y}$).
+ median of $x$ is `r round(median(x), 2)`, and
+ median of $y$ is `r round(median(y), 2)`.
 
 ```{r}
 brunnermunzel.test(x, y, alternative = "greater")
@@ -145,6 +156,7 @@ wilcox.test(x, y, alternative = "greater")
 When using formula,
  `brunnermunzel.test` with `alternative = "greater"` option
  tests an alternative hypothesis "1st level is greater than 2nd level".
+
 In contrast,
  `brunnermunzel.test` with `alternative = "less"` option
  tests an alternative hypothesis "1st level is lesser than 2nd level".
