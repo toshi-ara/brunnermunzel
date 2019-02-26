@@ -14,9 +14,8 @@
       double precision,intent(in)::x(n)
       double precision,intent(out)::rk(n)
 
-      integer i,j,k
+      integer i,j
       integer idx(n)
-      double precision averank
 
       do i = 1, n
          idx(i) = i
@@ -37,10 +36,7 @@
             endif
          enddo
 
-         averank = (i + j) * 0.5
-         do k = i, j
-            rk(idx(k)) = averank
-         enddo
+         rk(idx(i:j)) = (i + j) * 0.5
 
          if (j.eq.n) then
             exit
