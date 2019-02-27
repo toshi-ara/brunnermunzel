@@ -62,7 +62,7 @@ NULL
 #' Y <- c(1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1)
 #' N <- c(3, 3, 4, 3, 1, 2, 3, 1, 1, 5, 4)
 #'
-#' \dontrun{
+#' \donttest{
 #' brunnermunzel.permutation.test(Y, N)
 #' }
 #'
@@ -78,7 +78,7 @@ NULL
 #'                    levels = c("Y", "N"))
 #' )
 #'
-#' \dontrun{
+#' \donttest{
 #' brunnermunzel.permutation.test(value ~ group, data = dat)
 #' }
 #'
