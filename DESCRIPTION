@@ -10,8 +10,7 @@ Description: Provides the functions for Brunner-Munzel test and
     permuted Brunner-Munzel test,
     which enable to use formula, matrix, and table as argument.
     These functions are based on Brunner and Munzel (2000)
-     <doi:URLencode("10.1002/(SICI)1521-4036(200001)42:1<17::AID-BIMJ17>3.0.CO;2-U")>
-    and Neubert and Brunner (2007) <doi:URLencode("10.1016/j.csda.2006.05.024")>.
+    and Neubert and Brunner (2007).
 URL: https://github.com/toshi-ara/brunnermunzel
 BugReports: https://github.com/toshi-ara/brunnermunzel/issues/
 RoxygenNote: 6.1.1
