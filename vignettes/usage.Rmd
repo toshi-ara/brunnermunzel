@@ -1,0 +1,248 @@
+---
+title: "Usage of `brunnermunzel` package"
+author: "Toshiaki Ara"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This `brunnermunzel` package is to perform (permuted) Brunner-Munzel test
+ for stochastic equality of two samples,
+ which is also known as the Generalized Wilcoxon test.
+
+For **Brunner-Munzel test** [@ref:1],
+`brunner.munzel.test` function in `lawstat` package is very famous.
+This function is extended to enable
+ to use **formula**, **matrix**, and **table** as an argument.
+
+Also, the function `brunnermunzel.permutation.test`
+ for **permuted Brunner-Munzel test** [@ref:2] was provided.
+
+# Usage of functions in `brunnermunzel` package
+## Default and Formula class
+### Sample data
+
+In this section,
+ we will use sample data from Hollander & Wolfe (1973), 29f.
+ -- Hamilton depression scale factor measurements in 9 patients with
+ mixed anxiety and depression, taken at the first (x) and second (y) visit
+ after initiation of a therapy (administration of a tranquilizer)".
+
+```{r}
+x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+```
+
+For formula interface, data was converted to `data.frame`.
+
+```{r}
+dat <- data.frame(
+    value = c(x, y),
+    group = factor(rep(c("x", "y"), c(length(x), length(y))),
+                   levels = c("x", "y")))
+```
+
+```{r, message=FALSE}
+library(dplyr)
+dat %>%
+    group_by(group) %>%
+    summarize_all(list(mean = mean, median = median))
+```
+
+
+```{r, echo=FALSE, fig.width=4, fig.asp=1, out.width="50%"}
+library(ggplot2)
+set.seed(100)
+ggplot(dat, aes(x = group, y = value)) +
+    geom_jitter(width = 0.01)
+```
+
+### Analysis
+#### analysis with Brunner-Munzel test
+```{r}
+library(brunnermunzel)
+
+brunnermunzel.test(x, y)
+
+brunnermunzel.test(value ~ group, data = dat)
+```
+
+#### analysis with permuted Brunner-Munzel test
+To perform permuted Brunner-Munzel test,
+ use `brunnermunzel.test` with "`perm = TRUE`" option,
+ or `brunnermunzel.permutation.test` function.
+This "`perm`" option is used in also formula interface, matrix, and table.
+
+When `perm` is `TRUE`,
+ `brunnermunzel.test` calls
+ `brunnermunzel.permutation.test` in internal.
+
+```{r, message=FALSE}
+brunnermunzel.test(x, y, perm = TRUE)
+
+brunnermunzel.permutation.test(x, y)
+```
+
+Because statistics in all combinations are calculated
+ in permuted Brunner-Munzel test
+ (${}_{n_{x}+n_{y}}C_{n_{x}}$ where
+  $n_{x}$ and $n_{y}$ are sample size of $x$ and $y$, respectively),
+  it takes a long time to obtain results.
+
+Therefore, when sample size is too large
+ [the number of combination is more than 40116600
+  ($=$ `choose(28, 14)`)],
+ it switches to Brunner-Munzel test automatically.
+
+```{r}
+# sample size is 30
+brunnermunzel.permutation.test(1:15, 3:17)
+```
+
+#### using `force` option
+
+When you want to perform permuted Brunner-Munzel test
+ regardless sample size,
+ you add "`force = TRUE`" option to `brunnermunzel.permutation test`.
+
+```{r, eval=FALSE}
+brunnermunzel.permutation.test(1:15, 3:17, force = TRUE)
+#>
+#>  permuted Brunner-Munzel Test
+#>
+#> data:  1:15 and 3:17
+#> p-value = 0.2341
+```
+
+#### using `alternative` option
+
+`brunnermunzel.test` also can use "`alternative`" option
+ as well as `t.test` and `wilcox.test` functions.
+
+To test whether the average rank of group $x$ is greater
+ than that of group $y$,
+ `alternative = "greater"` option is added.
+In contrast,
+ to test whether the average rank of group $x$ is lesser
+ than that of group $y$,
+ `alternative = "less"` option is added.
+
+The results of Brunner-Munzel test and
+ Wilcoxon sum-rank test (Mann-Whitney test)
+ with `alternative = "greater"` option are shown.
+In this case,
+ median of $x$ is `r round(median(x), 2)`, and
+ median of $y$ is `r round(median(y), 2)`.
+
+```{r}
+brunnermunzel.test(x, y, alternative = "greater")
+
+wilcox.test(x, y, alternative = "greater")
+```
+
+When using formula,
+ `brunnermunzel.test` with `alternative = "greater"` option
+ tests an alternative hypothesis "1st level is greater than 2nd level".
+
+In contrast,
+ `brunnermunzel.test` with `alternative = "less"` option
+ tests an alternative hypothesis "1st level is lesser than 2nd level".
+
+```{r}
+dat$group
+```
+
+```{r}
+brunnermunzel.test(value ~ group, data = dat, alternative = "greater")$p.value
+
+wilcox.test(value ~ group, data = dat, alternative = "greater")$p.value
+```
+
+```{r}
+brunnermunzel.test(x, y, alternative = "less")$p.value
+
+wilcox.test(x, y, alternative = "less")$p.value
+```
+
+
+## Matrix and Table class
+
+In some case, data is provided as aggregated table.
+Both `brunnermunzel.test` and `brunnermunzel.permutation.test`
+ accept data of **matirix** and **table** class.
+
+```{r, sample_data_matrix, echo=FALSE}
+dat1 <- matrix(c(5, 3, 2, 1, 3, 6), nr = 2, byrow = TRUE)
+dat2 <- as.table(dat1)
+colnames(dat2) <- c("Normal", "Moderate", "Severe")
+```
+
+```{r, echo=FALSE}
+knitr::kable(dat2, caption = "Fictional data")
+```
+
+### Sample data
+
+```{r, sample_data_matrix, eval=FALSE}
+```
+
+```{r}
+dat1  # matrix class
+
+dat2  # table class
+```
+
+### Analysis
+#### analysis with Brunner-Munzel test
+
+```{r}
+brunnermunzel.test(dat1)
+
+brunnermunzel.test(dat2)
+```
+
+#### analysis with permuted Brunner-Munzel test
+
+```{r}
+brunnermunzel.permutation.test(dat1)
+
+brunnermunzel.permutation.test(dat2)
+```
+
+# About program
+## `brunnermunzel.test` function
+
+`brunnermunzel.test` function is derived from
+ `brunner.munzel.test` function in `lawstat` package
+ (Maintainer of this package is Vyacheslav Lyubchich;
+  License is GPL-2 or GPL-3)
+ with modification.
+The authors of this function are
+ Wallace Hui, Yulia R. Gel, Joseph L. Gastwirth and Weiwen Miao.
+
+## `combination` subroutine by FORTRAN77
+
+FORTRAN subroutine `combination` in combination.f is derived from
+ the program by shikino
+ (http://slpr.sakura.ne.jp/qp/combination)(CC-BY-4.0)
+  with slight modification.
+
+Without this subroutine,
+ I could not make `brunnermunzel.permutation.test`.
+Thanks to shikono for your useful subroutine.
+
+
+# References

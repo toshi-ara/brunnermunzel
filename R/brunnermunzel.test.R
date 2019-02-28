@@ -42,8 +42,9 @@
 #' ## 95 percent confidence interval:
 #' ##  -0.02962941  0.59753064
 #' ## sample estimates:
-#' ## P(X<Y)+.5*P(X=Y) 
-#' ##        0.2839506 
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##        0.2839506
+#'
 #'
 #' ## Formula interface.
 #' dat <- data.frame(
@@ -103,7 +104,38 @@
 #' ## P(X<Y)+.5*P(X=Y)
 #' ##         0.788961
 #'
+#'
+#' ## Matrix or Table interface.
+#' ##
+#' dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
+#' dat2 <- as.table(dat1)
+#'
+#' brunnermunzel.test(dat1)  # matrix
+#'
+#' ##       Brunner-Munzel Test
+#' ## data:  Group1 and Group2
+#' ## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
+#' ## 0.1393
+#' ## 95 percent confidence interval:
+#' ##  0.4351213 0.9248787
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##             0.68
+#'
+#' brunnermunzel.test(dat2)  # table
+#'
+#' ##       Brunner-Munzel Test
+#' ## data:  A and B
+#' ## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
+#' ## 0.1393
+#' ## 95 percent confidence interval:
+#' ##  0.4351213 0.9248787
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##             0.68
+#'
 #' @export
+#'
 brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 
 #' @rdname brunnermunzel.test
@@ -111,21 +143,35 @@ brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 #'
 #' @importFrom stats na.omit pt qt
 #'
-#' @param x the numeric vector of data values from the sample 1.
+#' @param x the numeric vector of data values from the sample 1,
+#'  or 2 x n matrix of table
+#' (number of row must be 2 and column is ordinal variables).
 #' @param y the numeric vector of data values from the sample 2.
+#'  If x is matrix or table, y must be missing.
 #' @param alpha significance level, default is 0.05 for 95\% confidence
 #' interval.
 #' @param alternative a character string specifying the alternative
 #' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 #' \code{"less"}. User can specify just the initial letter.
+#' @param perm
+#'   \describe{
+#'    \item{FALSE}{(default): perform Brunner-Munzel test.}
+#'    \item{TRUE}{: perform permuted Brunner-Munzel test.}
+#'   }
 #'
 #' @export
 #'
 brunnermunzel.test.default <-
     function (x, y,
               alternative = c("two.sided", "greater", "less"),
-              alpha = 0.05, ...)
+              alpha = 0.05, perm = FALSE, ...)
 {
+    if (perm) {
+        res <- brunnermunzel.permutation.test(x, y,
+                                              alternative = alternative, ...)
+        return(res)
+    }
+
     alternative <- match.arg(alternative)
     DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
@@ -148,15 +194,14 @@ brunnermunzel.test.default <-
     p.value <-
         switch(alternative,
                "two.sided" =
-                   2 * min(pt(abs(statistic), dfbm),
-                           pt(abs(statistic), dfbm, lower.tail = FALSE)),
+                   pt(abs(statistic), dfbm, lower.tail = FALSE) * 2,
                "greater" =
                    pt(statistic, dfbm),
                "less" =
                    pt(statistic, dfbm, lower.tail = FALSE)
                )
 
-    conf.int <- pst + c(-1, 1) * qt(1 - alpha/2, dfbm) *
+    conf.int <- pst + c(-1, 1) * qt(alpha/2, dfbm, lower.tail = FALSE) *
         sqrt(v1/(n1 * n2^2) + v2/(n2 * n1^2))
 
     ESTIMATE <- pst
@@ -226,3 +271,43 @@ brunnermunzel.test.formula <-
     y$data.name <- DNAME
     y
 }
+
+
+#' @rdname brunnermunzel.test
+#' @method brunnermunzel.test matrix
+#'
+#' @export
+#'
+brunnermunzel.test.matrix <- function(x, ...) {
+    if (!is.matrix(x)) {
+        stop("Class of data must be 'matrix' or 'table'")
+    }
+
+    if (nrow(x) != 2L) {
+        stop("Number of rows must be 2")
+    }
+
+    rname <- rownames(x)
+    if (is.null(rname)) {
+        rname <- c("Group1", "Group2")
+    }
+    DNAME <- paste(rname, collapse = " and ")
+
+    level <- seq_len(ncol(x))
+    g1 <- rep(level, x[1,])
+    g2 <- rep(level, x[2,])
+
+    z <- do.call("brunnermunzel.test", c(list(g1, g2, ...)))
+    z$data.name <- DNAME
+    z
+}
+
+#' @rdname brunnermunzel.test
+#' @method brunnermunzel.test table
+#'
+#' @export
+#'
+brunnermunzel.test.table <- function(x, ...) {
+    brunnermunzel.test.matrix(x, ...)
+}
+

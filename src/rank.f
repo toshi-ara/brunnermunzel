@@ -10,14 +10,12 @@
 *
       subroutine rank(n, x, rk)
       implicit none
-      ! in
-      integer n
-      double precision x(n)
-      ! out
-      double precision rk(n)
+      integer,intent(in)::n
+      double precision,intent(in)::x(n)
+      double precision,intent(out)::rk(n)
 
-      integer k,i,j
-      integer idx(N)
+      integer i,j
+      integer idx(n)
 
       do i = 1, n
          idx(i) = i
@@ -38,14 +36,12 @@
             endif
          enddo
 
-         do k = i, j
-            rk(idx(k)) = (i + j) / 2.0
-         enddo
+         rk(idx(i:j)) = (i + j) * 0.5
 
-         i = j + 1
-         if (i.gt.n) then
+         if (j.eq.n) then
             exit
          endif
+         i = j + 1
       enddo
 
       return

@@ -4,22 +4,31 @@
 \alias{brunnermunzel.test}
 \alias{brunnermunzel.test.default}
 \alias{brunnermunzel.test.formula}
+\alias{brunnermunzel.test.matrix}
+\alias{brunnermunzel.test.table}
 \title{brunnermunzel.test}
 \usage{
 brunnermunzel.test(x, ...)
 
 \method{brunnermunzel.test}{default}(x, y, alternative = c("two.sided",
-  "greater", "less"), alpha = 0.05, ...)
+  "greater", "less"), alpha = 0.05, perm = FALSE, ...)
 
 \method{brunnermunzel.test}{formula}(formula, data, subset, na.action, ...)
+
+\method{brunnermunzel.test}{matrix}(x, ...)
+
+\method{brunnermunzel.test}{table}(x, ...)
 }
 \arguments{
-\item{x}{the numeric vector of data values from the sample 1.}
+\item{x}{the numeric vector of data values from the sample 1,
+ or 2 x n matrix of table
+(number of row must be 2 and column is ordinal variables).}
 
 \item{\dots}{further arguments to be passed to or from methods
 (This argument is for only formula).}
 
-\item{y}{the numeric vector of data values from the sample 2.}
+\item{y}{the numeric vector of data values from the sample 2.
+If x is matrix or table, y must be missing.}
 
 \item{alternative}{a character string specifying the alternative
 hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
@@ -27,6 +36,11 @@ hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 
 \item{alpha}{significance level, default is 0.05 for 95\% confidence
 interval.}
+
+\item{perm}{\describe{
+ \item{FALSE}{(default): perform Brunner-Munzel test.}
+ \item{TRUE}{: perform permuted Brunner-Munzel test.}
+}}
 
 \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
 is a numeric variable giving the data values and \code{rhs} a factor
@@ -84,8 +98,9 @@ brunnermunzel.test(x, y)
 ## 95 percent confidence interval:
 ##  -0.02962941  0.59753064
 ## sample estimates:
-## P(X<Y)+.5*P(X=Y) 
-##        0.2839506 
+## P(X<Y)+.5*P(X=Y)
+##        0.2839506
+
 
 ## Formula interface.
 dat <- data.frame(
@@ -144,6 +159,36 @@ brunnermunzel.test(value ~ group, data = dat)
 ## sample estimates:
 ## P(X<Y)+.5*P(X=Y)
 ##         0.788961
+
+
+## Matrix or Table interface.
+##
+dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
+dat2 <- as.table(dat1)
+
+brunnermunzel.test(dat1)  # matrix
+
+##       Brunner-Munzel Test
+## data:  Group1 and Group2
+## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
+## 0.1393
+## 95 percent confidence interval:
+##  0.4351213 0.9248787
+## sample estimates:
+## P(X<Y)+.5*P(X=Y)
+##             0.68
+
+brunnermunzel.test(dat2)  # table
+
+##       Brunner-Munzel Test
+## data:  A and B
+## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
+## 0.1393
+## 95 percent confidence interval:
+##  0.4351213 0.9248787
+## sample estimates:
+## P(X<Y)+.5*P(X=Y)
+##             0.68
 
 }
 \seealso{

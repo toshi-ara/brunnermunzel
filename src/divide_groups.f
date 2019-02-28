@@ -12,14 +12,12 @@
 *
       subroutine divide_groups(nx, ny, dat, idx, x, y, xy)
       implicit none
-      ! in
-      integer nx, ny
-      double precision dat(nx + ny)
-      integer idx(nx)
-      ! out
-      double precision x(nx), y(ny), xy(nx + ny)
+      integer,intent(in)::nx,ny
+      double precision,intent(in)::dat(nx+ny)
+      integer,intent(in)::idx(nx)
+      double precision,intent(out)::x(nx),y(ny),xy(nx+ny)
 
-      integer i, ix, iy
+      integer i,ix,iy
       integer tmp(nx+1)         ! to avoid overflow
 
       tmp(1:(nx+1)) = (/idx(1:nx), -1/)
