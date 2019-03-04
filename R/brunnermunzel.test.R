@@ -215,6 +215,10 @@ brunnermunzel.test.default <-
 
         conf.int <- pst + c(-1, 1) * qt(alpha/2, dfbm, lower.tail = FALSE) *
             sqrt(v1/(n1 * n2^2) + v2/(n2 * n1^2))
+
+        # limit confident interval to [0, 1]
+        conf.int[1] <- max(0, conf.int[1])
+        conf.int[2] <- min(1, conf.int[2])
     }
 
     ESTIMATE <- pst
