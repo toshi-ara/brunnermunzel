@@ -183,14 +183,14 @@ brunnermunzel.test.default <-
     r1 <- rank(x); r2 <- rank(y); r <- rank(c(x, y))
     m1 <- mean(r[1:n1]); m2 <- mean(r[n1 + 1:n2])
 
-    pst <- (m2 - (n2 + 1)/2) / n1
+    pst <- (m2 - (n2 + 1)/2) / n1 # estimation
 
-    if (pst == 1) { # X < Y
+    if (pst == 1) { # X < Y (not overlapped)
         conf.int <- c(1, 1)
         statistic <- Inf
         dfbm <- NaN
         p.value <- ifelse(alternative == "greater", 1, 0)
-    } else if (pst == 0) { # X < Y
+    } else if (pst == 0) { # X < Y (not overlapped)
         conf.int <- c(0, 0)
         statistic <- -Inf
         dfbm <- NaN
@@ -199,10 +199,10 @@ brunnermunzel.test.default <-
         v1 <- sum((r[1:n1] - r1 - m1 + (n1 + 1)/2)^2) / (n1 - 1)
         v2 <- sum((r[n1 + 1:n2] - r2 - m2 + (n2 + 1)/2)^2) / (n2 - 1)
 
-        statistic <- n1 * n2 * (m2 - m1) / (n1 + n2) / sqrt(n1 * v1 + n2 * v2)
-        if (is.na(statistic)) {
-            statistic <- ifelse(pst > 0.5, Inf, -Inf)
-        }
+        ## statistic <- n1 * n2 * (m2 - m1) / (n1 + n2) / sqrt(n1 * v1 + n2 * v2)
+        log_stat <- sum(log(c(n1, n2, abs(m2 - m1)))) -
+            log(n1 + n2) - 0.5 * log(n1 * v1 + n2 * v2)
+        statistic <- exp(log_stat) * sign(m2 - m1)
 
         dfbm <- (n1 * v1 + n2 * v2)^2 /
             (((n1 * v1)^2)/(n1 - 1) + ((n2 * v2)^2)/(n2 - 1))
