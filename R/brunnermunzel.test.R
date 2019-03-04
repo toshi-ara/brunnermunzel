@@ -184,25 +184,38 @@ brunnermunzel.test.default <-
     m1 <- mean(r[1:n1]); m2 <- mean(r[n1 + 1:n2])
 
     pst <- (m2 - (n2 + 1)/2) / n1
-    v1 <- sum((r[1:n1] - r1 - m1 + (n1 + 1)/2)^2) / (n1 - 1)
-    v2 <- sum((r[n1 + 1:n2] - r2 - m2 + (n2 + 1)/2)^2) / (n2 - 1)
 
-    statistic <- n1 * n2 * (m2 - m1) / (n1 + n2) / sqrt(n1 * v1 + n2 * v2)
-    dfbm <- (n1 * v1 + n2 * v2)^2 /
-        (((n1 * v1)^2)/(n1 - 1) + ((n2 * v2)^2)/(n2 - 1))
+    if (pst == 1) { # X < Y
+        conf.int <- c(1, 1)
+        statistic <- Inf
+        dfbm <- NaN
+        p.value <- ifelse(alternative == "greater", 1, 0)
+    } else if (pst == 0) { # X < Y
+        conf.int <- c(0, 0)
+        statistic <- -Inf
+        dfbm <- NaN
+        p.value <- ifelse(alternative == "less", 1, 0)
+    } else {
+        v1 <- sum((r[1:n1] - r1 - m1 + (n1 + 1)/2)^2) / (n1 - 1)
+        v2 <- sum((r[n1 + 1:n2] - r2 - m2 + (n2 + 1)/2)^2) / (n2 - 1)
 
-    p.value <-
-        switch(alternative,
-               "two.sided" =
-                   pt(abs(statistic), dfbm, lower.tail = FALSE) * 2,
-               "greater" =
-                   pt(statistic, dfbm),
-               "less" =
-                   pt(statistic, dfbm, lower.tail = FALSE)
-               )
+        statistic <- n1 * n2 * (m2 - m1) / (n1 + n2) / sqrt(n1 * v1 + n2 * v2)
+        dfbm <- (n1 * v1 + n2 * v2)^2 /
+            (((n1 * v1)^2)/(n1 - 1) + ((n2 * v2)^2)/(n2 - 1))
 
-    conf.int <- pst + c(-1, 1) * qt(alpha/2, dfbm, lower.tail = FALSE) *
-        sqrt(v1/(n1 * n2^2) + v2/(n2 * n1^2))
+        p.value <-
+            switch(alternative,
+                   "two.sided" =
+                       pt(abs(statistic), dfbm, lower.tail = FALSE) * 2,
+                   "greater" =
+                       pt(statistic, dfbm),
+                   "less" =
+                       pt(statistic, dfbm, lower.tail = FALSE)
+                   )
+
+        conf.int <- pst + c(-1, 1) * qt(alpha/2, dfbm, lower.tail = FALSE) *
+            sqrt(v1/(n1 * n2^2) + v2/(n2 * n1^2))
+    }
 
     ESTIMATE <- pst
     names(ESTIMATE) <- "P(X<Y)+.5*P(X=Y)"
