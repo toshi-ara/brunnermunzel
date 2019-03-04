@@ -200,6 +200,10 @@ brunnermunzel.test.default <-
         v2 <- sum((r[n1 + 1:n2] - r2 - m2 + (n2 + 1)/2)^2) / (n2 - 1)
 
         statistic <- n1 * n2 * (m2 - m1) / (n1 + n2) / sqrt(n1 * v1 + n2 * v2)
+        if (is.na(statistic)) {
+            statistic <- ifelse(pst > 0.5, Inf, -Inf)
+        }
+
         dfbm <- (n1 * v1 + n2 * v2)^2 /
             (((n1 * v1)^2)/(n1 - 1) + ((n2 * v2)^2)/(n2 - 1))
 
