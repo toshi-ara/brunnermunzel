@@ -199,10 +199,8 @@ brunnermunzel.test.default <-
         v1 <- sum((r[1:n1] - r1 - m1 + (n1 + 1)/2)^2) / (n1 - 1)
         v2 <- sum((r[n1 + 1:n2] - r2 - m2 + (n2 + 1)/2)^2) / (n2 - 1)
 
-        ## statistic <- n1 * n2 * (m2 - m1) / (n1 + n2) / sqrt(n1 * v1 + n2 * v2)
-        log_stat <- sum(log(c(n1, n2, abs(m2 - m1)))) -
-            log(n1 + n2) - 0.5 * log(n1 * v1 + n2 * v2)
-        statistic <- exp(log_stat) * sign(m2 - m1)
+        statistic <- as.numeric(n1) * as.numeric(n2) * (m2 - m1) /
+            (n1 + n2) / sqrt(n1 * v1 + n2 * v2)
 
         dfbm <- (n1 * v1 + n2 * v2)^2 /
             (((n1 * v1)^2)/(n1 - 1) + ((n2 * v2)^2)/(n2 - 1))
