@@ -22,7 +22,8 @@
 #'
 #' @seealso The R script of brunnermunzel.test.default is
 #'  derived from that of \code{brunner.munzel.test}
-#'   in \code{lawstat} package.
+#'   in \code{lawstat} package,
+#'   and is rewritten with FORTRAN.
 #'  Thanks to authors of \code{lawstat} package.
 #'
 #'@examples
@@ -40,7 +41,7 @@
 #' ## data:  x and y
 #' ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
 #' ## 95 percent confidence interval:
-#' ##  -0.02962941  0.59753064
+#' ##  0.0000000 0.5975306
 #' ## sample estimates:
 #' ## P(X<Y)+.5*P(X=Y)
 #' ##        0.2839506
@@ -60,7 +61,7 @@
 #' ## data:  value by group
 #' ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
 #' ## 95 percent confidence interval:
-#' ##  -0.02962941  0.59753064
+#' ##  0.0000000 0.5975306
 #' ## sample estimates:
 #' ## P(X<Y)+.5*P(X=Y) 
 #' ##        0.2839506 
@@ -153,7 +154,7 @@ brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 #' @param alternative a character string specifying the alternative
 #' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 #' \code{"less"}. User can specify just the initial letter.
-#' @param perm
+#' @param perm logical
 #'   \describe{
 #'    \item{FALSE}{(default): perform Brunner-Munzel test.}
 #'    \item{TRUE}{: perform permuted Brunner-Munzel test.}
@@ -178,65 +179,37 @@ brunnermunzel.test.default <-
     x <- na.omit(x); y <- na.omit(y)
 
     n1 <- length(x); n2 <- length(y)
-    if (n1 == 1 || n2 == 1) stop("not enough observations")
+    if (n1 == 1L || n2 == 1L) stop("not enough observations")
 
-    r1 <- rank(x); r2 <- rank(y); r <- rank(c(x, y))
-    m1 <- mean(r[1:n1]); m2 <- mean(r[n1 + 1:n2])
+    alt <- switch(alternative,
+                  "two.sided" = 1L,
+                  "greater" = 2L,
+                  "less" = 3L)
 
-    pst <- (m2 - (n2 + 1)/2) / n1 # estimation
+    res <- .Fortran("bm_test",
+                    nx = as.integer(n1), ny = as.integer(n2),
+                    x = as.double(x), y = as.double(y),
+                    alpha = as.double(alpha),
+                    alter = as.integer(alt),
+                    pst = numeric(1), ci = numeric(2),
+                    stat = numeric(1), df = numeric(1),
+                    pval = numeric(1),
+                    PACKAGE = "brunnermunzel")
 
-    if (pst == 1) { # X < Y (not overlapped)
-        conf.int <- c(1, 1)
-        statistic <- Inf
-        dfbm <- NaN
-        p.value <- ifelse(alternative == "greater", 1, 0)
-    } else if (pst == 0) { # X < Y (not overlapped)
-        conf.int <- c(0, 0)
-        statistic <- -Inf
-        dfbm <- NaN
-        p.value <- ifelse(alternative == "less", 1, 0)
-    } else {
-        v1 <- sum((r[1:n1] - r1 - m1 + (n1 + 1)/2)^2) / (n1 - 1)
-        v2 <- sum((r[n1 + 1:n2] - r2 - m2 + (n2 + 1)/2)^2) / (n2 - 1)
-
-        statistic <- as.numeric(n1) * as.numeric(n2) * (m2 - m1) /
-            (n1 + n2) / sqrt(n1 * v1 + n2 * v2)
-
-        dfbm <- (n1 * v1 + n2 * v2)^2 /
-            (((n1 * v1)^2)/(n1 - 1) + ((n2 * v2)^2)/(n2 - 1))
-
-        p.value <-
-            switch(alternative,
-                   "two.sided" =
-                       pt(abs(statistic), dfbm, lower.tail = FALSE) * 2,
-                   "greater" =
-                       pt(statistic, dfbm),
-                   "less" =
-                       pt(statistic, dfbm, lower.tail = FALSE)
-                   )
-
-        conf.int <- pst + c(-1, 1) * qt(alpha/2, dfbm, lower.tail = FALSE) *
-            sqrt(v1/(n1 * n2^2) + v2/(n2 * n1^2))
-
-        # limit confident interval to [0, 1]
-        conf.int[1] <- max(0, conf.int[1])
-        conf.int[2] <- min(1, conf.int[2])
-    }
-
-    ESTIMATE <- pst
+    ESTIMATE <- res$pst
     names(ESTIMATE) <- "P(X<Y)+.5*P(X=Y)"
-    STATISTIC <- statistic
+    STATISTIC <- res$stat
     names(STATISTIC) <- "Brunner-Munzel Test Statistic"
-    PARAMETER <- dfbm
+    PARAMETER <- res$df
     names(PARAMETER) <- "df"
-    CONF.INT <- conf.int
+    CONF.INT <- res$ci
     names(CONF.INT) <- c("lower", "upper")
     attr(CONF.INT, "conf.level") <- (1 - alpha)
     METHOD <- "Brunner-Munzel Test"
 
     structure(list(estimate = ESTIMATE, conf.int = CONF.INT,
                    statistic = STATISTIC, parameter = PARAMETER,
-                   p.value = p.value, method = METHOD, data.name = DNAME),
+                   p.value = res$pval, method = METHOD, data.name = DNAME),
               class = "htest")
 }
 

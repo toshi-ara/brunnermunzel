@@ -37,7 +37,8 @@ hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 \item{alpha}{significance level, default is 0.05 for 95\% confidence
 interval.}
 
-\item{perm}{\describe{
+\item{perm}{logical
+\describe{
  \item{FALSE}{(default): perform Brunner-Munzel test.}
  \item{TRUE}{: perform permuted Brunner-Munzel test.}
 }}
@@ -96,7 +97,7 @@ brunnermunzel.test(x, y)
 ## data:  x and y
 ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
 ## 95 percent confidence interval:
-##  -0.02962941  0.59753064
+##  0.0000000 0.5975306
 ## sample estimates:
 ## P(X<Y)+.5*P(X=Y)
 ##        0.2839506
@@ -116,7 +117,7 @@ brunnermunzel.test(value ~ group, data = dat)
 ## data:  value by group
 ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
 ## 95 percent confidence interval:
-##  -0.02962941  0.59753064
+##  0.0000000 0.5975306
 ## sample estimates:
 ## P(X<Y)+.5*P(X=Y) 
 ##        0.2839506 
@@ -194,6 +195,7 @@ brunnermunzel.test(dat2)  # table
 \seealso{
 The R script of brunnermunzel.test.default is
  derived from that of \code{brunner.munzel.test}
-  in \code{lawstat} package.
+  in \code{lawstat} package,
+  and is rewritten with FORTRAN.
  Thanks to authors of \code{lawstat} package.
 }
