@@ -68,9 +68,12 @@
       double precision,intent(in)::mx,my
       double precision,intent(out)::stat,df,se
 
+      double precision n1,n2
       double precision hm,nv,nvx,nvy
       double precision dx(nx),dy(ny),vx,vy
       integer i
+
+      n1 = dble(nx); n2 = dble(ny)
 
       vx = 0; vy = 0
       dx = (rkxy(1:nx) - rkx - mx + (nx + 1) * 0.5)**2
@@ -83,13 +86,13 @@
       enddo
       vx = vx / (nx - 1); vy = vy / (ny - 1)
 
-      hm = dble(nx) * dble(ny) / (nx + ny)
-      nvx = nx * vx; nvy = ny * vy
+      hm = n1 * n2 / (nx + ny)
+      nvx = n1 * vx; nvy = n1 * vy
       nv = nvx + nvy
 
       stat = hm * (my - mx) / sqrt(nv)
       df = nv**2 / (nvx**2 / (nx - 1) + nvy**2 / (ny - 1))
-      se = sqrt(vx / (nx * ny * ny) + vy / (nx * nx * ny))
+      se = sqrt(vx / (n1 * n2 * n2) + vy / (n1 * n1 * n2))
       return
       end subroutine calc_stat
 
