@@ -1,7 +1,7 @@
 ---
 title: brunnermunzel
 author: Toshiaki Ara
-date: "2019-02-18"
+date: "2019-03-05"
 ---
 
 # Introduction
@@ -17,15 +17,14 @@ Moreover,
   used in the case of small sample size.
 
 The script of `brunnermunzel.test` is derived from
- that of `lawstat` package and slightly modified.
+ that of `lawstat` package, and is rewrote with FORTRAN.
 Thanks to Vyacheslav Lyubchich
  (maintainer of `lawstat` package).
 
 # Installation
 
 ```r
-library(devtools)
-install_github("toshi-ara/brunnermunzel")
+remotes::install_github("toshi-ara/brunnermunzel")
 ```
 
 # Example
