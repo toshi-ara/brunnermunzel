@@ -41,7 +41,7 @@
 #' ## data:  x and y
 #' ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
 #' ## 95 percent confidence interval:
-#' ##  -0.02962941  0.59753064
+#' ##  0.0000000 0.5975306
 #' ## sample estimates:
 #' ## P(X<Y)+.5*P(X=Y)
 #' ##        0.2839506
@@ -61,7 +61,7 @@
 #' ## data:  value by group
 #' ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
 #' ## 95 percent confidence interval:
-#' ##  -0.02962941  0.59753064
+#' ##  0.0000000 0.5975306
 #' ## sample estimates:
 #' ## P(X<Y)+.5*P(X=Y) 
 #' ##        0.2839506 
@@ -154,7 +154,7 @@ brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 #' @param alternative a character string specifying the alternative
 #' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
 #' \code{"less"}. User can specify just the initial letter.
-#' @param perm
+#' @param perm logical
 #'   \describe{
 #'    \item{FALSE}{(default): perform Brunner-Munzel test.}
 #'    \item{TRUE}{: perform permuted Brunner-Munzel test.}
