@@ -249,6 +249,7 @@ brunnermunzel.test.formula <-
     ## need stats:: for non-standard evaluation
     m[[1L]] <- quote(stats::model.frame)
     m$... <- NULL
+
     mf <- eval(m, parent.frame())
     DNAME <- paste(names(mf), collapse = " by ")
     names(mf) <- NULL
@@ -286,8 +287,8 @@ brunnermunzel.test.matrix <- function(x, ...) {
     DNAME <- paste(rname, collapse = " and ")
 
     level <- seq_len(ncol(x))
-    g1 <- rep(level, x[1,])
-    g2 <- rep(level, x[2,])
+    g1 <- rep(level, x[1L,])
+    g2 <- rep(level, x[2L,])
 
     z <- do.call("brunnermunzel.test", c(list(g1, g2, ...)))
     z$data.name <- DNAME

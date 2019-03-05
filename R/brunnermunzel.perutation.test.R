@@ -149,12 +149,12 @@ brunnermunzel.permutation.test.default <-
                         deparse(substitute(y)))
 
         nx <- length(x); ny <- length(y)
-        if (nx == 1 || ny == 1) stop("not enough observations")
+        if (nx == 1L || ny == 1L) stop("not enough observations")
         n_nCr <- choose(nx + ny, nx)
 
         # switch brunnermunzel.test
         #  when sample number is too large
-        if (!force && (n_nCr > 40116600)) { # choose(28, 14)
+        if (!force && (n_nCr > 40116600L)) { # choose(28, 14)
             warning(c("Sample number is too large. ",
                       "Using 'brunnermunzel.test'\n"))
             res <- brunnermunzel.test(x, y, alternative = alternative)
@@ -169,7 +169,7 @@ brunnermunzel.permutation.test.default <-
                         statistics = numeric(n_nCr),
                         PACKAGE = "brunnermunzel")
         z1 <- res$statistics
-        z0 <- z1[1]
+        z0 <- z1[1L]
 
         p.value <- switch(alternative,
                           "two.sided" = mean(abs(z1) >= abs(z0)),
@@ -212,19 +212,23 @@ brunnermunzel.permutation.test.formula <-
        || (length(formula) != 3L)
        || (length(attr(terms(formula[-2L]), "term.labels")) != 1L))
         stop("'formula' missing or incorrect")
+
     m <- match.call(expand.dots = FALSE)
     if (is.matrix(eval(m$data, parent.frame())))
         m$data <- as.data.frame(data)
     ## need stats:: for non-standard evaluation
     m[[1L]] <- quote(stats::model.frame)
     m$... <- NULL
+
     mf <- eval(m, parent.frame())
     DNAME <- paste(names(mf), collapse = " by ")
     names(mf) <- NULL
     response <- attr(attr(mf, "terms"), "response")
+
     g <- factor(mf[[-response]])
     if (nlevels(g) != 2L)
         stop("grouping factor must have exactly 2 levels")
+
     DATA <- setNames(split(mf[[response]], g), c("x", "y"))
     y <- do.call("brunnermunzel.permutation.test", c(DATA, list(...)))
     y$data.name <- DNAME
@@ -253,8 +257,8 @@ brunnermunzel.permutation.test.matrix <- function(x, ...) {
     DNAME <- paste(rname, collapse = " and ")
 
     lv <- seq_len(ncol(x))
-    g1 <- rep(lv, x[1,])
-    g2 <- rep(lv, x[2,])
+    g1 <- rep(lv, x[1L,])
+    g2 <- rep(lv, x[2L,])
 
     z <- do.call("brunnermunzel.permutation.test",
                  c(list(g1, g2, ...)))
