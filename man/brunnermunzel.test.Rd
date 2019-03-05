@@ -194,6 +194,7 @@ brunnermunzel.test(dat2)  # table
 \seealso{
 The R script of brunnermunzel.test.default is
  derived from that of \code{brunner.munzel.test}
-  in \code{lawstat} package.
+  in \code{lawstat} package,
+  and is rewrote with FORTRAN.
  Thanks to authors of \code{lawstat} package.
 }
