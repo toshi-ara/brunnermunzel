@@ -1,5 +1,5 @@
 # ChangeLog
-## version 1.2.0.9000-
+## version 1.2.0.9000- 
 * bugfix (PR#9)
   * return appropriate values using non-overlapping data
     * estimate, confidence interval and P value
@@ -7,7 +7,7 @@
   * fix to return NA when using too large sample size
 * rewrote brunnermunzel.test with FORTRAN (PR#10)
 
-## version 1.2.0
+## version 1.2.0 (2019-02-28)
 * initial release
 * extensive function from `brunner.munzel.test` in `lawstat` package
   * Functions accept formula
