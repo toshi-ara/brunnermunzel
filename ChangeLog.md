@@ -12,9 +12,9 @@
 * extensive function from `brunner.munzel.test` in `lawstat` package
   * Functions accept formula
   * Functions accept matrix and table (PR#3)
-  * add several options to `brunnermunzel.test` (PR#8)
+  * add option to `brunnermunzel.test` (PR#8)
     * `perm`: perform permuted Brunner-Munzel test
-  * add several options to `brunnermunzel.permutaion.test` (PR#8)
+  * add option to `brunnermunzel.permutaion.test` (PR#8)
     * `force`: perform permuted Brunner-Munzel test
                whenever sample size is large
   * add vignette (PR#7)
