@@ -5,14 +5,14 @@
 *     (input)
 *     nx, ny: length of data
 *     x, y  : provided data
-*     alt   : alterative (1: "two.sided", 2: "greater", 3: "less")
+*     alter : alterative (1: "two.sided", 2: "greater", 3: "less")
 *     alpha : level of significance
 *     (output)
-*     pst : estimation of "P(X<Y)+.5*P(X=Y)"
-*     ci  : confidence interval of estimation
-*     stat: statistics in Brunner-Munzel test
-*     df  : degree of freedom
-*     pval: P value of Brunner-Munzel test
+*     pst   : estimation of "P(X<Y)+.5*P(X=Y)"
+*     ci    : confidence interval of estimation (length = 2)
+*     stat  : statistics in Brunner-Munzel test
+*     df    : degree of freedom
+*     pval  : P value of Brunner-Munzel test
 *
       subroutine bm_test(nx,ny,x,y,alpha,alter,pst,ci,stat,df,pval)
       implicit none
@@ -22,15 +22,18 @@
       integer,intent(in)::alter
       double precision,intent(out)::pst,ci(2),stat,df,pval
 
-      double precision rkx(nx),rky(ny),xy(nx+ny),rkxy(nx+ny)
-      double precision mx,my,se
-      double precision P1(3), P0(3) ! P value for non-overlapped data
-      double precision ZERO ! for Inf, NaN
-      double precision mean ! external functions
+!     variables for calculation of statistics
+      double precision rkx(nx),rky(ny),xy(nx+ny),rkxy(nx+ny),mx,my
+      double precision se
+
+!     P value for non-overlapped data
+      double precision,parameter::P1(3) = (/0.0, 1.0, 0.0/)
+      double precision,parameter::P0(3) = (/0.0, 0.0, 1.0/)
+
+      double precision ZERO     ! for Inf, NaN
+      double precision mean     ! external function
 
       ZERO = 0.0
-      P1 = (/0.0, 1.0, 0.0/)
-      P0 = (/0.0, 0.0, 1.0/)
       xy = (/x, y/)
 
       call rank(nx, x, rkx)
@@ -41,26 +44,37 @@
 
       pst = (my - (ny + 1) * 0.5) / nx
 
-      if (pst.eq.1) then ! X < Y: non-overlapped data
-         ci(1:2) = (/1.0, 1.0/)
-         stat = 1.0 / ZERO ! Inf
-         df = 0.0 / ZERO ! NaN
-         pval = P1(alter)
-      else if (pst.eq.0) then ! X > Y: non-overlapped data
-         ci(1:2) = (/0.0, 0.0/)
-         stat = -1.0 / ZERO ! -Inf
-         df = 0.0 / ZERO ! NaN
-         pval = P0(alter)
-      else ! overlapped data
+      if (pst.eq.1) then        ! non-overlapped data: X < Y
+         ci(1:2) = pst          !   (/1.0, 1.0/)
+         stat = 1.0 / ZERO      !   Inf
+         df = 0.0 / ZERO        !   NaN
+         pval = P1(alter)       !   P = 1 in "greater", P = 0 in others
+      else if (pst.eq.0) then   ! non-overlapped data: X > Y
+         ci(1:2) = pst          !   (/0.0, 0.0/)
+         stat = -1.0 / ZERO     !   -Inf
+         df = 0.0 / ZERO        !   NaN
+         pval = P0(alter)       !   P = 1 in "less", P = 0 in others
+      else                      ! overlapped data
          call calc_stat(nx, ny, rkx, rky, rkxy, mx, my, stat, df, se)
          call calc_pval(stat, df, alter, pval)
          call calc_confint(pst, df, se, alpha, ci)
       endif
+
       return
       end
 
 
-!     calculation of parameters (stat, df, se)
+*
+*     calculation of parameters (stat, df, se)
+*     (input)
+*     nx, ny: length of data
+*     rkx, rky, rkxy: rank in x, y, xy
+*     mx, my: mean rank of x and y group
+*     (output)
+*     stat: statistics of Brunner-Munzel test
+*     df  : degree of freedom
+*     se  : standard error for confidence interval
+*
       subroutine calc_stat(nx, ny, rkx, rky, rkxy, mx, my, stat, df, se)
       implicit none
       integer,intent(in)::nx,ny
@@ -84,20 +98,28 @@
       do i = 1, ny
          vy = vy + dy(i)
       enddo
-      vx = vx / (nx - 1); vy = vy / (ny - 1)
+      vx = vx / (nx - 1); vy = vy / (ny - 1) ! variance of group x and y
 
       hm = n1 * n2 / (nx + ny)
       nvx = n1 * vx; nvy = n1 * vy
       nv = nvx + nvy
 
       stat = hm * (my - mx) / sqrt(nv)
-      df = nv**2 / (nvx**2 / (nx - 1) + nvy**2 / (ny - 1))
+      df = nv * nv / (nvx * nvx / (nx - 1) + nvy * nvy / (ny - 1))
       se = sqrt(vx / (n1 * n2 * n2) + vy / (n1 * n1 * n2))
       return
       end subroutine calc_stat
 
 
-!     calculation of P value
+*
+*     calculation of P value
+*     (input)
+*     stat : statistics of Brunner-Munzel test
+*     df   : degree of freedom
+*     alter: alterative (1: "two.sided", 2: "greater", 3: "less")
+*     (output)
+*     pval : P value of Brunner-Munzel test
+*
       subroutine calc_pval(stat, df, alter, pval)
       implicit none
       double precision,intent(in)::stat,df
@@ -105,23 +127,32 @@
       double precision,intent(out)::pval
 
       double precision stat2
-      integer ltail(3)
+      integer lowertail(3)
       double precision multi(3)
       double precision Rf_pt
 
-      ltail = (/0, 1, 0/)
+      lowertail = (/0, 1, 0/)
       multi = (/2.0, 1.0, 1.0/)
 
       stat2 = stat
       if (alter.eq.1) then
          stat2 = abs(stat)
       endif
-      pval = Rf_pt(stat2, df, ltail(alter)) * multi(alter)
+      pval = Rf_pt(stat2, df, lowertail(alter)) * multi(alter)
       return
       end subroutine calc_pval
 
 
-!     calculation of confidence interval
+*
+*     calculation of confidence interval
+*     (input)
+*     pst  : estimation of "P(X<Y)+.5*P(X=Y)"
+*     df   : degree of freedom
+*     se   : standard error for confidence interval
+*     alpha: level of significance
+*     (output)
+*     ci   : confidence interval of estimation (length = 2)
+*
       subroutine calc_confint(pst, df, se, alpha, ci)
       implicit none
       double precision,intent(in)::pst,df,se,alpha
