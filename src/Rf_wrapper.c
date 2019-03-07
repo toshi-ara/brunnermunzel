@@ -1,4 +1,5 @@
 #include <R_ext/RS.h>
+#include <R_ext/Utils.h> /* for qsort4 */
 #include <Rmath.h>
 
 double F77_SUB(rf_pt)(double *q, double *df, int *lower_tail) {
