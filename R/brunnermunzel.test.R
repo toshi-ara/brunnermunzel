@@ -41,7 +41,7 @@
 #' ## data:  x and y
 #' ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
 #' ## 95 percent confidence interval:
-#' ##  0.0000000 0.5975306
+#' ##  -0.02962941  0.59753064
 #' ## sample estimates:
 #' ## P(X<Y)+.5*P(X=Y)
 #' ##        0.2839506
@@ -61,7 +61,7 @@
 #' ## data:  value by group
 #' ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
 #' ## 95 percent confidence interval:
-#' ##  0.0000000 0.5975306
+#' ##  -0.02962941  0.59753064
 #' ## sample estimates:
 #' ## P(X<Y)+.5*P(X=Y) 
 #' ##        0.2839506 
