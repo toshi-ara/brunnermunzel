@@ -16,7 +16,26 @@ subroutine bm_permutation_stat(n, r, n_nCr, dat, statistics)
   real(8),intent(in)::dat(n)
   real(8),intent(out)::statistics(n_nCr)
 
-  integer::nx,ny,i,j
+  interface
+     subroutine calc_statistics(nx, ny, dat, const, idx, stat)
+       implicit none
+       integer,intent(in)::nx,ny
+       real(8),intent(in)::dat(nx+ny)
+       real(8),intent(in)::const(6)
+       integer,intent(in)::idx(nx)
+       real(8),intent(out)::stat
+     end subroutine calc_statistics
+  end interface
+
+  interface
+     subroutine combination(n, r, ini, arr)
+       implicit none
+       integer,intent(in)::n,r,ini(1:r)
+       integer,intent(inout)::arr(1:r)
+     end subroutine combination
+  end interface
+
+  integer nx,ny,i,j
   real(8) stat
   integer ini(r),idx(r)
   real(8) const(6)

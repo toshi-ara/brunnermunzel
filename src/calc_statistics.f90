@@ -24,12 +24,29 @@ subroutine calc_statistics(nx, ny, dat, const, idx, stat)
   integer,intent(in)::idx(nx)
   real(8),intent(out)::stat
 
+  interface
+     subroutine divide_groups(nx, ny, dat, idx, x, y, xy)
+       implicit none
+       integer,intent(in)::nx,ny
+       real(8),intent(in)::dat(nx+ny)
+       integer,intent(in)::idx(nx)
+       real(8),intent(out)::x(nx),y(ny),xy(nx+ny)
+     end subroutine divide_groups
+  end interface
+
+  interface
+     subroutine rank(n, x, rk)
+       implicit none
+       integer,intent(in)::n
+       real(8),intent(in)::x(n)
+       real(8),intent(out)::rk(n)
+     end subroutine rank
+  end interface
+
   integer i
   real(8) x(nx),y(ny),xy(nx+ny)
   real(8) rkx(nx),rky(ny),rkxy(nx+ny)
   real(8) mx,my,vx,vy,v
-
-  real(8) mean
 
   call divide_groups(nx, ny, dat, idx, x, y, xy)
   call rank(nx, x, rkx)

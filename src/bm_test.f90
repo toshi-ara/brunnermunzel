@@ -22,6 +22,33 @@ subroutine bm_test(nx,ny,x,y,alpha,alter,pst,ci,stat,df,pval)
   integer,intent(in)::alter
   real(8),intent(out)::pst,ci(2),stat,df,pval
 
+  interface
+     subroutine calc_stat(nx, ny, rkx, rky, rkxy, mx, my, stat, df, se)
+       implicit none
+       integer,intent(in)::nx,ny
+       real(8),intent(in)::rkx(nx),rky(ny),rkxy(nx+ny)
+       real(8),intent(in)::mx,my
+       real(8),intent(out)::stat,df,se
+     end subroutine calc_stat
+  end interface
+
+  interface
+     subroutine calc_pval(stat, df, alter, pval)
+       implicit none
+       real(8),intent(in)::stat,df
+       integer,intent(in)::alter
+       real(8),intent(out)::pval
+     end subroutine calc_pval
+  end interface
+
+  interface
+     subroutine calc_confint(pst, df, se, alpha, ci)
+       implicit none
+       real(8),intent(in)::pst,df,se,alpha
+       real(8),intent(out)::ci(2)
+     end subroutine calc_confint
+  end interface
+
   ! variables for calculation of statistics
   real(8) rkx(nx),rky(ny),xy(nx+ny),rkxy(nx+ny),mx,my
   real(8) se
@@ -120,7 +147,14 @@ subroutine calc_pval(stat, df, alter, pval)
   real(8) stat2
   integer,parameter::lowertail(3) = (/0, 1, 0/)
   real(8),parameter::multi(3) = (/2.0, 1.0, 1.0/)
-  real(8) Rf_pt
+
+  interface
+     real(8) function Rf_pt(q, df, lowertail)
+       implicit none
+       real(8),intent(in)::q,df
+       integer,intent(in)::lowertail
+     end function Rf_pt
+  end interface
 
   select case(alter)
   case(1)
@@ -128,7 +162,6 @@ subroutine calc_pval(stat, df, alter, pval)
   case default
      stat2 = stat
   end select
-
 
   pval = Rf_pt(stat2, df, lowertail(alter)) * multi(alter)
   return
@@ -150,7 +183,13 @@ subroutine calc_confint(pst, df, se, alpha, ci)
   real(8),intent(in)::pst,df,se,alpha
   real(8),intent(out)::ci(2)
 
-  real(8) Rf_qt
+  interface
+     real(8) function Rf_qt(p, df, lowertail)
+       implicit none
+       real(8),intent(in)::p,df
+       integer,intent(in)::lowertail
+     end function Rf_qt
+  end interface
 
   ci = pst + Rf_qt(alpha * 0.5, abs(df), 0) * se * (/-1.0, 1.0/)
 
