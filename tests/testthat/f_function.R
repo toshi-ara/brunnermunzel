@@ -43,11 +43,13 @@ test_f_statistics <- function(dat, nx, stat) {
     n <- length(dat)
     ny <- n - nx
 
-    const <- numeric(4)
+    const <- numeric(6)
     const[1] = (nx + 1) * 0.5
     const[2] = (ny + 1) * 0.5
     const[3] = nx * 1.0 / (nx - 1)
     const[4] = ny * 1.0 / (ny - 1)
+    const[5] = 1.0 / nx
+    const[6] = 1.0 / ny
 
     res <- .Fortran("calc_statistics",
                 nx = as.integer(nx),
