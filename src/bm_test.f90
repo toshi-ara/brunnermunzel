@@ -154,8 +154,8 @@ subroutine calc_confint(pst, df, se, alpha, ci)
 
   ci = pst + Rf_qt(alpha * 0.5, abs(df), 0) * se * (/-1.0, 1.0/)
 
-  ci(1) = max(0.0, ci(1))
-  ci(2) = min(1.0, ci(2))
+  ! ci(1) = max(0.0, ci(1))
+  ! ci(2) = min(1.0, ci(2))
   return
 end subroutine calc_confint
 
