@@ -83,7 +83,7 @@
       double precision,intent(out)::stat,df,se
 
       double precision n1,n2
-      double precision hm,nv,nvx,nvy
+      double precision nv,nvx,nvy
       double precision dx(nx),dy(ny),vx,vy
       integer i
 
@@ -100,11 +100,10 @@
       enddo
       vx = vx / (nx - 1); vy = vy / (ny - 1) ! variance of group x and y
 
-      hm = n1 * n2 / (nx + ny)
       nvx = n1 * vx; nvy = n1 * vy
       nv = nvx + nvy
 
-      stat = hm * (my - mx) / sqrt(nv)
+      stat = n1 * n2 / (nx + ny) * (my - mx) / sqrt(nv)
       df = nv * nv / (nvx * nvx / (nx - 1) + nvy * nvy / (ny - 1))
       se = sqrt(vx / (n1 * n2 * n2) + vy / (n1 * n1 * n2))
       return
