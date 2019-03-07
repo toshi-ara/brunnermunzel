@@ -1,7 +1,6 @@
 // RegisteringDynamic Symbols
 
 #include <Rinternals.h>
-#include <R_ext/Rdynload.h>
 
 void R_init_brunnermunzel(DllInfo* info) {
   R_registerRoutines(info, NULL, NULL, NULL, NULL);
