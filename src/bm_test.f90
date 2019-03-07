@@ -71,12 +71,12 @@ subroutine bm_test(nx,ny,x,y,alpha,alter,pst,ci,stat,df,pval)
 
   pst = (my - (ny + 1) * 0.5) / nx
 
-  if (pst.eq.1) then        ! non-overlapped data: X < Y
+  if (pst == 1) then        ! non-overlapped data: X < Y
      ci(1:2) = pst          !   (/1.0, 1.0/)
      stat = 1.0 / ZERO      !   Inf
      df = 0.0 / ZERO        !   NaN
      pval = P1(alter)       !   P = 1 in "greater", P = 0 in others
-  else if (pst.eq.0) then   ! non-overlapped data: X > Y
+  else if (pst == 0) then   ! non-overlapped data: X > Y
      ci(1:2) = pst          !   (/0.0, 0.0/)
      stat = -1.0 / ZERO     !   -Inf
      df = 0.0 / ZERO        !   NaN
