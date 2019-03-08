@@ -142,7 +142,7 @@ brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 #' @rdname brunnermunzel.test
 #' @method brunnermunzel.test default
 #'
-#' @importFrom stats na.omit pt qt
+#' @importFrom stats na.omit
 #'
 #' @param x the numeric vector of data values from the sample 1,
 #'  or 2 x n matrix of table
