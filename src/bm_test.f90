@@ -58,18 +58,17 @@ subroutine bm_test(nx,ny,x,y,alpha,alter,pst,ci,stat,df,pval)
   real(8),parameter::P0(3) = (/0.0, 0.0, 1.0/)
 
   real(8) ZERO     ! for Inf, NaN
-  real(8) mean     ! external function
 
   ZERO = 0.0
   xy = (/x, y/)
 
-  call rank(nx, x, rkx)
-  call rank(ny, y, rky)
-  call rank(nx+ny, xy, rkxy)
-  mx = sum(rkxy(1:nx)) / nx
-  my = sum(rkxy(nx+1:nx+ny)) / ny
+  call rank(nx, x, rkx)            ! rank of x
+  call rank(ny, y, rky)            ! rank of y
+  call rank(nx+ny, xy, rkxy)       ! rank of c(x, y)
+  mx = sum(rkxy(1:nx)) / nx        ! mean rank of x
+  my = sum(rkxy(nx+1:nx+ny)) / ny  ! mean rank of y
 
-  pst = (my - (ny + 1) * 0.5) / nx
+  pst = (my - (ny + 1) * 0.5) / nx ! estimation
 
   if (pst == 1) then        ! non-overlapped data: X < Y
      ci(1:2) = pst          !   (/1.0, 1.0/)
@@ -113,7 +112,7 @@ subroutine calc_stat(nx, ny, rkx, rky, rkxy, mx, my, stat, df, se)
   real(8) nv,nvx,nvy
   real(8) vx,vy
 
-  n1 = dble(nx); n2 = dble(ny)
+  n1 = dble(nx); n2 = dble(ny)  ! avoid overflow by nx * ny in stat
 
   ! variance of group x and y
   vx = sum((rkxy(1:nx) - rkx(1:nx) - mx + (nx + 1) * 0.5)**2) / (nx - 1)
