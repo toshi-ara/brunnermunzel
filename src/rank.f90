@@ -17,8 +17,8 @@ subroutine rank(n, x, rk)
   interface
      subroutine qsort4(v, indx, ii, jj)
        implicit none
-       real(8),intent(in)::v(:)
-       integer,intent(inout)::indx(:)
+       real(8),intent(in)::v(*)
+       integer,intent(inout)::indx(*)
        integer,intent(in)::ii,jj
      end subroutine qsort4
   end interface
