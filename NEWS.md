@@ -1,4 +1,6 @@
 # ChangeLog
+## version 1.3.0.9000
+
 ## version 1.3.0
 * bugfix (PR#9)
   * return appropriate values using non-overlapping data
