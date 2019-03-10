@@ -1,9 +1,10 @@
 # ChangeLog
-## version 1.2.0.9000- 
+## version 1.3.0.9000
+
+## version 1.3.0
 * bugfix (PR#9)
   * return appropriate values using non-overlapping data
     * estimate, confidence interval and P value
-  * fix that confidence interval exceed 0 and 1
   * fix to return NA when using too large sample size
 * rewrote brunnermunzel.test with FORTRAN (PR#10)
 
