@@ -1,5 +1,5 @@
 # ChangeLog
-## version 1.2.0.9000- 
+## version 1.3.0
 * bugfix (PR#9)
   * return appropriate values using non-overlapping data
     * estimate, confidence interval and P value
