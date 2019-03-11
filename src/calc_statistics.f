@@ -51,11 +51,6 @@
       enddo
 
       v = const(3) * vx + const(4) * vy
-      ! to avoid division by zero
-      if (v.lt.0.000001) then
-         v = 0.00001
-      endif
-
       stat = (my - mx) / sqrt(v)
       return
       end
