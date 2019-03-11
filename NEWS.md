@@ -1,9 +1,9 @@
 # ChangeLog
-## version 1.3.0.9000
+## version 1.3.1 (2019-03-11)
 * rewrote completely with FORTRAN (PR#12)
   * calculation of P value
 
-## version 1.3.0
+## version 1.3.0 (2019-03-10)
 * bugfix (PR#9)
   * return appropriate values using non-overlapping data
     * estimate, confidence interval and P value
