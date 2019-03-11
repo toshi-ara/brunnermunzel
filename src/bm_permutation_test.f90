@@ -37,7 +37,7 @@ subroutine bm_permutation_test(n, r, n_nCr, dat, alter, pval)
 
   count = 0
   do i = 1, n_nCr
-     if (statistics(i).ge.statistics(1)) then
+     if (statistics(i) >= statistics(1)) then
         count = count + 1
      endif
   enddo
