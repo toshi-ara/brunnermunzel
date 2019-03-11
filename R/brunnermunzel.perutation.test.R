@@ -161,25 +161,24 @@ brunnermunzel.permutation.test.default <-
             return(res)
         }
 
-        res <- .Fortran("bm_permutation_stat",
+        alter <- switch(alternative,
+                        "two.sided" = 1L,
+                        "greater" = 2L,
+                        "less" = 3L)
+
+        res <- .Fortran("bm_permutation_test",
                         n = as.integer(nx + ny),
                         r = as.integer(nx),
                         n_nCr = as.integer(n_nCr),
                         dat = as.double(c(x, y)),
-                        statistics = numeric(n_nCr),
+                        alter = as.integer(alter),
+                        pval = numeric(1),
                         PACKAGE = "brunnermunzel")
-        z1 <- res$statistics
-        z0 <- z1[1L]
-
-        p.value <- switch(alternative,
-                          "two.sided" = mean(abs(z1) >= abs(z0)),
-                          "greater" = mean(z1 <= z0),
-                          "less" = mean(z1 >= z0))
 
         structure(
             list(
                 method = "permuted Brunner-Munzel Test",
-                p.value = p.value,
+                p.value = res$pval,
                 data.name = DNAME),
             class = "htest")
     }

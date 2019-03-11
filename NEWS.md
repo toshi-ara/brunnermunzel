@@ -1,5 +1,7 @@
 # ChangeLog
 ## version 1.3.0.9000
+* rewrote completely with FORTRAN (PR#12)
+  * calculation of P value
 
 ## version 1.3.0
 * bugfix (PR#9)
