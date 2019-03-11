@@ -1,4 +1,7 @@
 # ChangeLog
+## version 1.3.1.9000
+* fix typo
+
 ## version 1.3.1 (2019-03-11)
 * rewrote completely with FORTRAN (PR#12)
   * calculation of P value

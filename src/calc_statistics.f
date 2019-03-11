@@ -1,6 +1,6 @@
 *
 *     calc_statistics:
-*     calculation of statistics for Brunner-Munzel permutation test
+*     calculation of statistics for permuted Brunner-Munzel test
 *
 *     (input)
 *     nx, ny: length of x or y groups

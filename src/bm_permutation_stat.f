@@ -1,6 +1,6 @@
 *
 *     bm_permutation_stat:
-*     calculation of statistics for Brunner-Munzel permutation test
+*     calculation of statistics for permuted Brunner-Munzel test
 *
 *     (input)
 *     n    : length of data
