@@ -5,3 +5,4 @@
 ^.*\.sh$
 ^README\.Rmd$
 ^README\.md$
+^cran-comments\.md$
