@@ -1,5 +1,5 @@
 # ChangeLog
-## version 1.3.1.9000
+## version 1.3.2 (2019-03-28)
 * fix typo
 
 ## version 1.3.1 (2019-03-11)
