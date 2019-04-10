@@ -100,7 +100,7 @@
       enddo
       vx = vx / (nx - 1); vy = vy / (ny - 1) ! variance of group x and y
 
-      nvx = n1 * vx; nvy = n1 * vy
+      nvx = n1 * vx; nvy = n2 * vy
       nv = nvx + nvy
 
       stat = n1 * n2 / (nx + ny) * (my - mx) / sqrt(nv)

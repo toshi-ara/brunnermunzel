@@ -1,4 +1,9 @@
 # ChangeLog
+## version 1.3.3 (2019-04-10)
+* fix serious bug
+  * statistics and degree of freedom are incorrect
+    when sample sizes are different.
+
 ## version 1.3.2 (2019-03-28)
 * fix typo
 

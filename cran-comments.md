@@ -1,4 +1,12 @@
 # comment
+## apology
+I'm sorry to submit new version at short intervals.
+The current version 1.3.2 contains a serious bug
+ that statistics and degree of freedom are incorrect
+  when sample sizes are different.
+Therefore, I fixed this bug and submit new version.
+
+## warnings
 These words as below are person's name.
 
 Possibly mis-spelled words in DESCRIPTION:
