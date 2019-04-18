@@ -118,7 +118,7 @@ subroutine calc_stat(nx, ny, rkx, rky, rkxy, mx, my, stat, df, se)
   vx = sum((rkxy(1:nx) - rkx(1:nx) - mx + (nx + 1) * 0.5)**2) / (nx - 1)
   vy = sum((rkxy(nx+1:nx+ny) - rky(1:ny) - my + (ny + 1) * 0.5)**2) / (ny - 1)
 
-  nvx = n1 * vx; nvy = n1 * vy
+  nvx = n1 * vx; nvy = n2 * vy
   nv = nvx + nvy
 
   stat = n1 * n2 / (nx + ny) * (my - mx) / sqrt(nv)
