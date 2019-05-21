@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 This package was submitted to CRAN on 2019-05-21.
 Once it is accepted, delete this file and tag the release (commit 2f9b51480c).
+=======
+This package was submitted to CRAN on 2019-04-10.
+Once it is accepted, delete this file and tag the release (commit a3ddb7a409).
+>>>>>>> ae1bf3c590caab7e59d6fc5b2c4963aea8dd0d04

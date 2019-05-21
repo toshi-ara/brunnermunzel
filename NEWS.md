@@ -1,7 +1,10 @@
 # ChangeLog
+<<<<<<< HEAD
 ## version 1.3.4 (2019-05-21)
 * delete "dplyr, ggplot2" from VignetteBuilder entry in DESCRIPTION
 
+=======
+>>>>>>> ae1bf3c590caab7e59d6fc5b2c4963aea8dd0d04
 ## version 1.3.3 (2019-04-10)
 * fix serious bug
   * statistics and degree of freedom are incorrect
