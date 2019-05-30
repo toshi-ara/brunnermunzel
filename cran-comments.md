@@ -1,6 +1,5 @@
 # comment
-delete "dplyr, ggplot2" from VignetteBuilder entry in DESCRIPTION
- from E-mail by Kurt Hornik
+fix serious bug re-induced in version 1.3.4 (the same in version 1.3.3)
 
 Possibly mis-spelled words in DESCRIPTION:
   Brunner (3:19, 9:41, 10:14, 12:34, 14:21)
