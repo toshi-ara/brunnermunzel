@@ -177,6 +177,27 @@ brunnermunzel.test(x, y, alternative = "less")$p.value
 wilcox.test(x, y, alternative = "less")$p.value
 ```
 
+#### using `est` option
+
+Normally, `brunnermunzel.test` and `brunnermunzel.permutation test`
+ return the estimate $P(X<Y) + 0.5 \times P(X=Y)$.
+When '`est = "difference"`' option is used,
+ these functions return mean difference [$P(X<Y) - P(X>Y)$]
+  in estimate and confidence interval.
+
+Note that $P(X<Y) - P(X>Y) = 2p - 1$
+ when $p = P(X<Y) + 0.5 \times P(X=Y)$.
+
+This change is proposed by Dr. Julian D. Karch.
+
+
+```{r}
+brunnermunzel.test(x, y, est = "difference")
+
+brunnermunzel.permutation.test(x, y, est = "difference")
+```
+
+
 
 ## Matrix and Table class
 
