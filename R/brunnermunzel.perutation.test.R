@@ -39,6 +39,9 @@ NULL
 #' ##
 #' ## data:  x and y
 #' ## p-value = 0.158
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##        0.2839506
 #'
 #' ## Formula interface.
 #' dat <- data.frame(
@@ -53,6 +56,9 @@ NULL
 #' ##
 #' ## data:  value by group
 #' ## p-value = 0.158
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##        0.2839506
 #'
 #'
 #' ## Pain score on the third day after surgery for 14 patients under
@@ -70,6 +76,9 @@ NULL
 #' ##
 #' ## data:  Y and N
 #' ## p-value = 0.008038
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##         0.788961
 #'
 #' ## Formula interface.
 #' dat <- data.frame(
@@ -86,6 +95,9 @@ NULL
 #' ##
 #' ## data:  value by group
 #' ## p-value = 0.008038
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##         0.788961
 #'
 #'
 #' ## Matrix or Table interface.
@@ -99,6 +111,9 @@ NULL
 #' ##
 #' ## data:  Group1 and Group2
 #' ## p-value = 0.1593
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##             0.68
 #'
 #' brunnermunzel.permutation.test(dat2)  # table
 #'
@@ -108,6 +123,9 @@ NULL
 #' ##
 #' ## data:  A and B
 #' ## p-value = 0.1593
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##             0.68
 #'
 #' @export
 #'
@@ -173,11 +191,16 @@ brunnermunzel.permutation.test.default <-
                         dat = as.double(c(x, y)),
                         alter = as.integer(alter),
                         pval = numeric(1),
+                        pst = numeric(1),
                         PACKAGE = "brunnermunzel")
+
+        ESTIMATE <- res$pst
+        names(ESTIMATE) <- "P(X<Y)+.5*P(X=Y)"
 
         structure(
             list(
                 method = "permuted Brunner-Munzel Test",
+                estimate = ESTIMATE,
                 p.value = res$pval,
                 data.name = DNAME),
             class = "htest")
