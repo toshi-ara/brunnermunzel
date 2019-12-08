@@ -181,6 +181,7 @@ brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 #'      \item{difference}{: return mean differece.
 #'            i.e. \eqn{P(X < Y) - P(X > Y) = 2 * p - 1}}
 #'    }
+#' This change is proposed by Dr. Julian D. Karch.
 #'
 #'
 #' @export

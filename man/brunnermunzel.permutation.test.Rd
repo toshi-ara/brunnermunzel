@@ -50,7 +50,8 @@ must be either \code{original} (default) or \code{difference}.
      \item{original}{(default): return \eqn{p = P(X < Y) + 0.5 * P(X = Y)}}
      \item{difference}{: return mean differece.
                        i.e. \eqn{P(X < Y) - P(X > Y)} = 2 * p - 1}
-   }}
+   }
+This change is proposed by Dr. Julian D. Karch.}
 
 \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
 is a numeric variable giving the data values and \code{rhs} a factor
