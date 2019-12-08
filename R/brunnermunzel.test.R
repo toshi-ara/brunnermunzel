@@ -234,7 +234,6 @@ brunnermunzel.test.default <-
         names(ESTIMATE) <- "P(X<Y)-P(X>Y)"
         CONF.INT = res$ci * 2 - 1
     }
-        print(ESTIMATE)
 
     STATISTIC <- res$stat
     names(STATISTIC) <- "Brunner-Munzel Test Statistic"
