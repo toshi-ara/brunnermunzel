@@ -1,0 +1,252 @@
+#' @useDynLib brunnermunzel
+NULL
+
+#' permuted Brunner-Munzel test
+#'
+#' This function performs the permuted Brunner-Munzel test.
+#'
+#' @return A list containing the following components:
+#'  \item{method}{the characters ``permuted Brunner-Munzel Test''}
+#'  \item{data.name}{a character string giving the name of the data.}
+#'  \item{p.value}{the \eqn{p}-value of the test.}
+#'  \item{estimate}{an estimate of the effect size,
+#'        i.e., \eqn{P(X < Y) - P(X > Y)}}
+#'
+#' @references Karin Neubert and Edgar Brunner,
+#' ``A studentized permutation test for the non-parametric
+#' Behrens-Fisher problem'',
+#' Computational Statistics and Data Analysis, Vol. 51, pp. 5192-5204 (2007).
+#'
+#' @seealso This function is made in reference to following cite (in Japanese):
+#' Prof. Haruhiko Okumura
+#' (\url{https://oku.edu.mie-u.ac.jp/~okumura/stat/brunner-munzel.html}).
+#'
+#' @note FORTRAN subroutine `combination` in combination.f is derived from
+#' the program by shikino (\url{http://slpr.sakura.ne.jp/qp/combination})
+#' (CC-BY-4.0).
+#' Thanks to shikono for your useful subroutine.
+#'
+#' @examples
+#' ## Hollander & Wolfe (1973), 29f.
+#' ## Hamilton depression scale factor measurements in 9 patients with
+#' ##  mixed anxiety and depression, taken at the first (x) and second
+#' ##  (y) visit after initiation of a therapy (administration of a
+#' ##  tranquilizer).
+#' x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+#' y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+#'
+#' brunnermunzel.permutation.test2(x, y)
+#'
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  x and y
+#' ## p-value = 0.158
+#' ## sample estimates:
+#' ## P(X<Y)-P(X>Y)
+#' ##    -0.4320988
+#'
+#' ## Formula interface.
+#' dat <- data.frame(
+#'     value = c(x, y),
+#'     group = factor(rep(c("x", "y"), c(length(x), length(y))),
+#'                    levels = c("x", "y"))
+#' )
+#'
+#' brunnermunzel.permutation.test2(value ~ group, data = dat)
+#'
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  value by group
+#' ## p-value = 0.158
+#' ## sample estimates:
+#' ## P(X<Y)-P(X>Y)
+#' ##    -0.4320988
+#'
+#'
+#' ## Pain score on the third day after surgery for 14 patients under
+#' ## the treatment Y and 11 patients under the treatment N
+#' ## (see Brunner and Munzel, 2000; Neubert and Brunner, 2007).
+#'
+#' Y <- c(1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1)
+#' N <- c(3, 3, 4, 3, 1, 2, 3, 1, 1, 5, 4)
+#'
+#' \donttest{
+#' brunnermunzel.permutation.test2(Y, N)
+#' }
+#'
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  Y and N
+#' ## p-value = 0.008038
+#' ## sample estimates:
+#' ## P(X<Y)-P(X>Y)
+#' ##     0.5779221
+#'
+#' ## Formula interface.
+#' dat <- data.frame(
+#'     value = c(Y, N),
+#'     group = factor(rep(c("Y", "N"), c(length(Y), length(N))),
+#'                    levels = c("Y", "N"))
+#' )
+#'
+#' \donttest{
+#' brunnermunzel.permutation.test2(value ~ group, data = dat)
+#' }
+#'
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  value by group
+#' ## p-value = 0.008038
+#' ## sample estimates:
+#' ## P(X<Y)-P(X>Y)
+#' ##     0.5779221
+#'
+#'
+#' ## Matrix or Table interface.
+#' ##
+#' dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
+#' dat2 <- as.table(dat1)
+#'
+#' brunnermunzel.permutation.test2(dat1)  # matrix
+#'
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  Group1 and Group2
+#' ## p-value = 0.1593
+#' ## sample estimates:
+#' ## P(X<Y)-P(X>Y)
+#' ##          0.36
+#'
+#' brunnermunzel.permutation.test2(dat2)  # table
+#'
+#' ##       Brunner-Munzel Test
+#' ##
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  A and B
+#' ## p-value = 0.1593
+#' ## sample estimates:
+#' ## P(X<Y)-P(X>Y)
+#' ##          0.36
+#'
+#' @export
+#'
+brunnermunzel.permutation.test2 <-  function(x, ...)
+    UseMethod("brunnermunzel.permutation.test2")
+
+
+#' @rdname brunnermunzel.permutation.test2
+#' @method brunnermunzel.permutation.test2 default
+#'
+#' @importFrom stats setNames terms
+#'
+#' @param x the numeric vector of data values from the sample 1,
+#'  or 2 x n matrix of table
+#' (number of row must be 2 and column is ordinal variables).
+#' @param y the numeric vector of data values from the sample 2.
+#'  If x is matrix or table, y must be missing.
+#' @param alternative a character string specifying the alternative
+#' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
+#' \code{"less"}. User can specify just the initial letter.
+#' @param force
+#'   \describe{
+#'    \item{FALSE}{(default): If sample size is too large
+#'      [number of combinations > 40116600 = choose(28, 14)],
+#'      use \code{brunnermunzel.test}.}
+#'    \item{TRUE}{: perform permuted Brunner-Munzel test
+#'      regardless sample size.}
+#'   }
+#'
+#' @export
+#'
+brunnermunzel.permutation.test2.default <-
+    function(x, y,
+             alternative = c("two.sided", "greater", "less"),
+             force = FALSE,
+             ...) {
+        res <- brunnermunzel.permutation.test(x, y,
+                                              alternative = alternative,
+                                              force = force, ...)
+
+        ESTIMATE <- res$estimate * 2 - 1
+        names(ESTIMATE) <- "P(X<Y)-P(X>Y)"
+
+        structure(list(estimate = ESTIMATE,
+                       statistic = res$statistic,
+                       p.value = res$p.value,
+                       method = res$method,
+                       data.name = res$data.name),
+                  class = "htest")
+    }
+
+
+#' @rdname brunnermunzel.permutation.test2
+#' @method brunnermunzel.permutation.test2 formula
+#'
+#' @param formula a formula of the form \code{lhs ~ rhs} where \code{lhs}
+#' is a numeric variable giving the data values and \code{rhs} a factor
+#' with two levels giving the corresponding groups.
+#' @param data an optional matrix or data frame (or similar: see
+#' \code{\link{model.frame}}) containing the variables in the
+#' formula \code{formula}.  By default the variables are taken from
+#' \code{environment(formula)}.
+#' @param subset an optional vector specifying a subset of observations
+#' to be used.
+#' @param na.action a function which indicates what should happen when
+#' the data contain \code{NA}s.  Defaults to
+#' \code{getOption("na.action")}.
+#' @param \dots further arguments to be passed to or from methods
+#' (This argument is for only formula).
+#'
+#' @export
+#'
+brunnermunzel.permutation.test2.formula <-
+    function(formula, data, subset = NULL, na.action, ...)
+{
+    res <- brunnermunzel.permutation.test(formula = formula,
+                                          data = data, subset = NULL,
+                                          na.action = na.action, ...)
+
+    ESTIMATE <- res$estimate * 2 - 1
+    names(ESTIMATE) <- "P(X<Y)-P(X>Y)"
+
+    structure(
+        list(estimate = ESTIMATE,
+             p.value = res$p.value,
+             method = res$method,
+             data.name = res$data.name),
+        class = "htest"
+    )
+}
+
+
+#' @rdname brunnermunzel.permutation.test2
+#' @method brunnermunzel.permutation.test2 matrix
+#'
+#' @export
+#'
+brunnermunzel.permutation.test2.matrix <- function(x, ...) {
+    res <- brunnermunzel.permutation.test(x, ...)
+
+    ESTIMATE <- res$estimate * 2 - 1
+    names(ESTIMATE) <- "P(X<Y)-P(X>Y)"
+
+    structure(
+        list(estimate = ESTIMATE,
+             p.value = res$p.value,
+             method = res$method,
+             data.name = res$data.name),
+        class = "htest"
+    )
+}
+
+
+#' @rdname brunnermunzel.permutation.test2
+#' @method brunnermunzel.permutation.test2 table
+#'
+#' @export
+#'
+brunnermunzel.permutation.test2.table <- function(x, ...) {
+    brunnermunzel.permutation.test2.matrix(x, ...)
+}
+
