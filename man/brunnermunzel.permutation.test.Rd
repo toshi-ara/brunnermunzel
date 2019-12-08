@@ -11,10 +11,11 @@
 brunnermunzel.permutation.test(x, ...)
 
 \method{brunnermunzel.permutation.test}{default}(x, y,
-  alternative = c("two.sided", "greater", "less"), force = FALSE, ...)
+  alternative = c("two.sided", "greater", "less"), force = FALSE,
+  est = c("original", "difference"), ...)
 
-\method{brunnermunzel.permutation.test}{formula}(formula, data, subset,
-  na.action, ...)
+\method{brunnermunzel.permutation.test}{formula}(formula, data,
+  subset = NULL, na.action, ...)
 
 \method{brunnermunzel.permutation.test}{matrix}(x, ...)
 
@@ -32,8 +33,8 @@ brunnermunzel.permutation.test(x, ...)
 If x is matrix or table, y must be missing.}
 
 \item{alternative}{a character string specifying the alternative
-hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
-\code{"less"}. User can specify just the initial letter.}
+hypothesis, must be one of \code{two.sided} (default), \code{greater} or
+\code{less}. User can specify just the initial letter.}
 
 \item{force}{\describe{
  \item{FALSE}{(default): If sample size is too large
@@ -42,6 +43,14 @@ hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
  \item{TRUE}{: perform permuted Brunner-Munzel test
    regardless sample size.}
 }}
+
+\item{est}{a method to calculate estimate and confidence interval,
+must be either \code{original} (default) or \code{difference}.
+   \describe{
+     \item{original}{(default): return \eqn{p = P(X < Y) + 0.5 * P(X = Y)}}
+     \item{difference}{: return mean differece.
+                       i.e. \eqn{P(X < Y) - P(X > Y)} = 2 * p - 1}
+   }}
 
 \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
 is a numeric variable giving the data values and \code{rhs} a factor
@@ -64,8 +73,7 @@ A list containing the following components:
  \item{method}{the characters ``permuted Brunner-Munzel Test''}
  \item{data.name}{a character string giving the name of the data.}
  \item{p.value}{the \eqn{p}-value of the test.}
- \item{estimate}{an estimate of the effect size,
-       i.e., \eqn{P(X < Y) - P(X > Y)}}
+ \item{estimate}{an estimate of the effect size}
 }
 \description{
 This function performs the permuted Brunner-Munzel test.
@@ -94,6 +102,18 @@ brunnermunzel.permutation.test(x, y)
 ## sample estimates:
 ## P(X<Y)+.5*P(X=Y)
 ##        0.2839506
+
+## 'est' option
+## if 'est = "difference"' return P(X<Y) - P(X>Y)
+brunnermunzel.permutation.test(x, y, est = "difference")
+##       permuted Brunner-Munzel Test
+##
+## data:  x and y
+## p-value = 0.158
+## sample estimates:
+## P(X<Y)-P(X>Y)
+##    -0.4320988
+
 
 ## Formula interface.
 dat <- data.frame(
