@@ -5,7 +5,7 @@
 \alias{brunnermunzel.permutation.test2.default}
 \alias{brunnermunzel.permutation.test2.formula}
 \alias{brunnermunzel.permutation.test2.matrix}
-\alias{brunnermunzel.permutation.test.table2}
+\alias{brunnermunzel.permutation.test2.table}
 \title{permuted Brunner-Munzel test}
 \usage{
 brunnermunzel.permutation.test2(x, ...)
@@ -102,7 +102,7 @@ dat <- data.frame(
                    levels = c("x", "y"))
 )
 
-brunnermunzel.permutation.test(value ~ group, data = dat)
+brunnermunzel.permutation.test2(value ~ group, data = dat)
 
 ##       permuted Brunner-Munzel Test
 ##
