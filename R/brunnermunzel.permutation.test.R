@@ -9,8 +9,7 @@ NULL
 #'  \item{method}{the characters ``permuted Brunner-Munzel Test''}
 #'  \item{data.name}{a character string giving the name of the data.}
 #'  \item{p.value}{the \eqn{p}-value of the test.}
-#'  \item{estimate}{an estimate of the effect size,
-#'        i.e., \eqn{P(X < Y) - P(X > Y)}}
+#'  \item{estimate}{an estimate of the effect size}
 #'
 #' @references Karin Neubert and Edgar Brunner,
 #' ``A studentized permutation test for the non-parametric
@@ -44,6 +43,18 @@ NULL
 #' ## sample estimates:
 #' ## P(X<Y)+.5*P(X=Y)
 #' ##        0.2839506
+#'
+#' ## 'est' option
+#' ## if 'est = "difference"' return P(X<Y) - P(X>Y)
+#' brunnermunzel.permutation.test(x, y, est = "difference")
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  x and y
+#' ## p-value = 0.158
+#' ## sample estimates:
+#' ## P(X<Y)-P(X>Y)
+#' ##    -0.4320988
+#'
 #'
 #' ## Formula interface.
 #' dat <- data.frame(
@@ -146,8 +157,8 @@ brunnermunzel.permutation.test <-  function(x, ...)
 #' @param y the numeric vector of data values from the sample 2.
 #'  If x is matrix or table, y must be missing.
 #' @param alternative a character string specifying the alternative
-#' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
-#' \code{"less"}. User can specify just the initial letter.
+#' hypothesis, must be one of \code{two.sided} (default), \code{greater} or
+#' \code{less}. User can specify just the initial letter.
 #' @param force
 #'   \describe{
 #'    \item{FALSE}{(default): If sample size is too large
@@ -156,6 +167,13 @@ brunnermunzel.permutation.test <-  function(x, ...)
 #'    \item{TRUE}{: perform permuted Brunner-Munzel test
 #'      regardless sample size.}
 #'   }
+#' @param est a method to calculate estimate and confidence interval,
+#' must be either \code{original} (default) or \code{difference}.
+#'    \describe{
+#'      \item{original}{(default): return \eqn{p = P(X < Y) + 0.5 * P(X = Y)}}
+#'      \item{difference}{: return mean differece.
+#'                        i.e. \eqn{P(X < Y) - P(X > Y)} = 2 * p - 1}
+#'    }
 #'
 #' @export
 #'
@@ -163,8 +181,10 @@ brunnermunzel.permutation.test.default <-
     function(x, y,
              alternative = c("two.sided", "greater", "less"),
              force = FALSE,
+             est = c("original", "difference"),
              ...) {
         alternative <- match.arg(alternative)
+        est <- match.arg(est)
         DNAME <-  paste(deparse(substitute(x)), "and",
                         deparse(substitute(y)))
 
@@ -177,7 +197,10 @@ brunnermunzel.permutation.test.default <-
         if (!force && (n_nCr > 40116600L)) { # choose(28, 14)
             warning(c("Sample number is too large. ",
                       "Using 'brunnermunzel.test'\n"))
-            res <- brunnermunzel.test(x, y, alternative = alternative)
+            res <- brunnermunzel.test(x, y,
+                                      alternative = alternative,
+                                      est = est,
+                                      ...)
             return(res)
         }
 
@@ -196,15 +219,20 @@ brunnermunzel.permutation.test.default <-
                         pst = numeric(1),
                         PACKAGE = "brunnermunzel")
 
-        ESTIMATE <- res$pst
-        names(ESTIMATE) <- "P(X<Y)+.5*P(X=Y)"
+        if (est == "original") {
+            ESTIMATE <- res$pst
+            names(ESTIMATE) <- "P(X<Y)+.5*P(X=Y)"
+        } else {
+            ESTIMATE <- res$pst * 2 - 1
+            names(ESTIMATE) <- "P(X<Y)-P(X>Y)"
+        }
 
         structure(
             list(
                 method = "permuted Brunner-Munzel Test",
-                estimate = ESTIMATE,
+                data.name = DNAME,
                 p.value = res$pval,
-                data.name = DNAME),
+                estimate = ESTIMATE),
             class = "htest")
     }
 
@@ -230,7 +258,7 @@ brunnermunzel.permutation.test.default <-
 #' @export
 #'
 brunnermunzel.permutation.test.formula <-
-    function(formula, data, subset, na.action, ...)
+    function(formula, data, subset = NULL, na.action, ...)
 {
     if (missing(formula)
        || (length(formula) != 3L)
