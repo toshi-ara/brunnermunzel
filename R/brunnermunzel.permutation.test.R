@@ -7,8 +7,10 @@ NULL
 #'
 #' @return A list containing the following components:
 #'  \item{method}{the characters ``permuted Brunner-Munzel Test''}
-#'  \item{p.value}{the \eqn{p}-value of the test.}
 #'  \item{data.name}{a character string giving the name of the data.}
+#'  \item{p.value}{the \eqn{p}-value of the test.}
+#'  \item{estimate}{an estimate of the effect size,
+#'        i.e., \eqn{P(X < Y) - P(X > Y)}}
 #'
 #' @references Karin Neubert and Edgar Brunner,
 #' ``A studentized permutation test for the non-parametric

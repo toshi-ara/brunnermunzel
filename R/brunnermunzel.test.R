@@ -6,11 +6,11 @@
 #' This function enables to use formula as argument.
 #'
 #' @return A list containing the following components:
+#'  \item{data.name}{a character string giving the name of the data.}
 #'  \item{statistic}{the Brunner--Munzel test statistic.}
 #'  \item{parameter}{the degrees of freedom.}
-#'  \item{conf.int}{the confidence interval.}
 #'  \item{p.value}{the \eqn{p}-value of the test.}
-#'  \item{data.name}{a character string giving the name of the data.}
+#'  \item{conf.int}{the confidence interval.}
 #'  \item{estimate}{an estimate of the effect size,
 #'        i.e., \eqn{P(X < Y) + 0.5 * P(X = Y)}}
 #'
