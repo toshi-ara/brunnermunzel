@@ -10,12 +10,17 @@
 \usage{
 brunnermunzel.test(x, ...)
 
-\method{brunnermunzel.test}{default}(x, y, alternative = c("two.sided",
-  "greater", "less"), alpha = 0.05, perm = FALSE, est = c("original",
-  "difference"), ...)
+\method{brunnermunzel.test}{default}(
+  x,
+  y,
+  alternative = c("two.sided", "greater", "less"),
+  alpha = 0.05,
+  perm = FALSE,
+  est = c("original", "difference"),
+  ...
+)
 
-\method{brunnermunzel.test}{formula}(formula, data, subset = NULL,
-  na.action, ...)
+\method{brunnermunzel.test}{formula}(formula, data, subset = NULL, na.action, ...)
 
 \method{brunnermunzel.test}{matrix}(x, ...)
 

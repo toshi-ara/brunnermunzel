@@ -1,5 +1,5 @@
 # ChangeLog
-## version 1.3.5.9000 (2019-12-08)
+## version 1.4.0 (2019-12-22)
 * return the sample estimate in brunnermunzel.permutation.test
 * return 'P(X<Y) - P(X>Y)' as the sample estimate
    when setting 'est = "difference"' (new option)

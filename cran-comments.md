@@ -1,5 +1,8 @@
 # comment
-fix serious bug re-induced in version 1.3.4 (the same in version 1.3.3)
+add several outputs and an option
+* return the sample estimate in brunnermunzel.permutation.test
+* return 'P(X<Y) - P(X>Y)' as the sample estimate
+   when setting 'est = "difference"' (new option)
 
 Possibly mis-spelled words in DESCRIPTION:
   Brunner (3:19, 9:41, 10:14, 12:34, 14:21)

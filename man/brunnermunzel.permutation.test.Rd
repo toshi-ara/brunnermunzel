@@ -10,12 +10,16 @@
 \usage{
 brunnermunzel.permutation.test(x, ...)
 
-\method{brunnermunzel.permutation.test}{default}(x, y,
-  alternative = c("two.sided", "greater", "less"), force = FALSE,
-  est = c("original", "difference"), ...)
+\method{brunnermunzel.permutation.test}{default}(
+  x,
+  y,
+  alternative = c("two.sided", "greater", "less"),
+  force = FALSE,
+  est = c("original", "difference"),
+  ...
+)
 
-\method{brunnermunzel.permutation.test}{formula}(formula, data,
-  subset = NULL, na.action, ...)
+\method{brunnermunzel.permutation.test}{formula}(formula, data, subset = NULL, na.action, ...)
 
 \method{brunnermunzel.permutation.test}{matrix}(x, ...)
 
