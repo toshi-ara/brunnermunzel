@@ -35,7 +35,7 @@ NULL
 #' y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
 #'
 #' brunnermunzel.permutation.test(x, y)
-#'
+#' ##
 #' ##       permuted Brunner-Munzel Test
 #' ##
 #' ## data:  x and y
@@ -47,6 +47,7 @@ NULL
 #' ## 'est' option
 #' ## if 'est = "difference"' return P(X<Y) - P(X>Y)
 #' brunnermunzel.permutation.test(x, y, est = "difference")
+#' ##
 #' ##       permuted Brunner-Munzel Test
 #' ##
 #' ## data:  x and y
@@ -64,7 +65,7 @@ NULL
 #' )
 #'
 #' brunnermunzel.permutation.test(value ~ group, data = dat)
-#'
+#' ##
 #' ##       permuted Brunner-Munzel Test
 #' ##
 #' ## data:  value by group
@@ -84,7 +85,7 @@ NULL
 #' \donttest{
 #' brunnermunzel.permutation.test(Y, N)
 #' }
-#'
+#' ##
 #' ##       permuted Brunner-Munzel Test
 #' ##
 #' ## data:  Y and N
@@ -103,7 +104,7 @@ NULL
 #' \donttest{
 #' brunnermunzel.permutation.test(value ~ group, data = dat)
 #' }
-#'
+#' ##
 #' ##       permuted Brunner-Munzel Test
 #' ##
 #' ## data:  value by group
@@ -119,7 +120,7 @@ NULL
 #' dat2 <- as.table(dat1)
 #'
 #' brunnermunzel.permutation.test(dat1)  # matrix
-#'
+#' ##
 #' ##       permuted Brunner-Munzel Test
 #' ##
 #' ## data:  Group1 and Group2
@@ -129,7 +130,7 @@ NULL
 #' ##             0.68
 #'
 #' brunnermunzel.permutation.test(dat2)  # table
-#'
+#' ##
 #' ##       Brunner-Munzel Test
 #' ##
 #' ##       permuted Brunner-Munzel Test

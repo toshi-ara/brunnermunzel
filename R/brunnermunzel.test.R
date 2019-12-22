@@ -35,7 +35,7 @@
 #' y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
 #'
 #' brunnermunzel.test(x, y)
-#'
+#' ##
 #' ##       Brunner-Munzel Test
 #' ## data:  x and y
 #' ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
@@ -48,8 +48,6 @@
 #' ## 'est' option
 #' ## if 'est = "difference"' return P(X<Y) - P(X>Y)
 #' brunnermunzel.test(x, y, est = "difference")
-#' ## P(X<Y)-P(X>Y)
-#' ##    -0.4320988
 #' ##
 #' ##       Brunner-Munzel Test
 #' ##
@@ -70,7 +68,7 @@
 #' )
 #'
 #' brunnermunzel.test(value ~ group, data = dat)
-#'
+#' ##
 #' ##       Brunner-Munzel Test
 #' ##
 #' ## data:  value by group
@@ -90,7 +88,7 @@
 #' N <- c(3, 3, 4, 3, 1, 2, 3, 1, 1, 5, 4)
 #'
 #' brunnermunzel.test(Y, N)
-#'
+#' ##
 #' ##       Brunner-Munzel Test
 #' ## data: Y and N
 #' ## Brunner-Munzel Test Statistic = 3.1375,  df = 17.683, p-value = 0.005786
@@ -108,7 +106,7 @@
 #' )
 #'
 #' brunnermunzel.test(value ~ group, data = dat)
-#'
+#' ##
 #' ##       Brunner-Munzel Test
 #' ##
 #' ## data:  value by group
@@ -127,7 +125,7 @@
 #' dat2 <- as.table(dat1)
 #'
 #' brunnermunzel.test(dat1)  # matrix
-#'
+#' ##
 #' ##       Brunner-Munzel Test
 #' ## data:  Group1 and Group2
 #' ## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
@@ -139,7 +137,7 @@
 #' ##             0.68
 #'
 #' brunnermunzel.test(dat2)  # table
-#'
+#' ##
 #' ##       Brunner-Munzel Test
 #' ## data:  A and B
 #' ## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =

@@ -54,7 +54,7 @@ interval.}
 must be either \code{original} (default) or \code{difference}.
    \describe{
      \item{original}{(default): return \eqn{p = P(X < Y) + 0.5 * P(X = Y)}}
-     \item{difference}{: return mean differece.
+     \item{difference}{: return mean difference.
            i.e. \eqn{P(X < Y) - P(X > Y) = 2 * p - 1}}
    }
 This change is proposed by Dr. Julian D. Karch.}
@@ -107,7 +107,7 @@ x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
 y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
 
 brunnermunzel.test(x, y)
-
+##
 ##       Brunner-Munzel Test
 ## data:  x and y
 ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
@@ -120,8 +120,6 @@ brunnermunzel.test(x, y)
 ## 'est' option
 ## if 'est = "difference"' return P(X<Y) - P(X>Y)
 brunnermunzel.test(x, y, est = "difference")
-## P(X<Y)-P(X>Y)
-##    -0.4320988
 ##
 ##       Brunner-Munzel Test
 ##
@@ -142,7 +140,7 @@ dat <- data.frame(
 )
 
 brunnermunzel.test(value ~ group, data = dat)
-
+##
 ##       Brunner-Munzel Test
 ##
 ## data:  value by group
@@ -162,7 +160,7 @@ Y <- c(1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1)
 N <- c(3, 3, 4, 3, 1, 2, 3, 1, 1, 5, 4)
 
 brunnermunzel.test(Y, N)
-
+##
 ##       Brunner-Munzel Test
 ## data: Y and N
 ## Brunner-Munzel Test Statistic = 3.1375,  df = 17.683, p-value = 0.005786
@@ -180,7 +178,7 @@ dat <- data.frame(
 )
 
 brunnermunzel.test(value ~ group, data = dat)
-
+##
 ##       Brunner-Munzel Test
 ##
 ## data:  value by group
@@ -199,7 +197,7 @@ dat1 <- matrix(c(4, 4, 2, 1, 5, 4), nr = 2, byrow = TRUE)
 dat2 <- as.table(dat1)
 
 brunnermunzel.test(dat1)  # matrix
-
+##
 ##       Brunner-Munzel Test
 ## data:  Group1 and Group2
 ## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
@@ -211,7 +209,7 @@ brunnermunzel.test(dat1)  # matrix
 ##             0.68
 
 brunnermunzel.test(dat2)  # table
-
+##
 ##       Brunner-Munzel Test
 ## data:  A and B
 ## Brunner-Munzel Test Statistic = 1.5511, df = 16.961, p-value =
