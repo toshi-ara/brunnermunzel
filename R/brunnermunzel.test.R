@@ -6,13 +6,12 @@
 #' This function enables to use formula as argument.
 #'
 #' @return A list containing the following components:
+#'  \item{data.name}{a character string giving the name of the data.}
 #'  \item{statistic}{the Brunner--Munzel test statistic.}
 #'  \item{parameter}{the degrees of freedom.}
-#'  \item{conf.int}{the confidence interval.}
 #'  \item{p.value}{the \eqn{p}-value of the test.}
-#'  \item{data.name}{a character string giving the name of the data.}
-#'  \item{estimate}{an estimate of the effect size,
-#'        i.e., \eqn{P(X < Y) + 0.5 * P(X = Y)}}
+#'  \item{conf.int}{the confidence interval.}
+#'  \item{estimate}{an estimate of the effect size}
 #'
 #' @note There exist discrepancies with Brunner and Munzel (2000)
 #'  because there is a typo in the paper. The corrected version is
@@ -45,6 +44,22 @@
 #' ## sample estimates:
 #' ## P(X<Y)+.5*P(X=Y)
 #' ##        0.2839506
+#'
+#' ## 'est' option
+#' ## if 'est = "difference"' return P(X<Y) - P(X>Y)
+#' brunnermunzel.test(x, y, est = "difference")
+#' ## P(X<Y)-P(X>Y)
+#' ##    -0.4320988
+#' ##
+#' ##       Brunner-Munzel Test
+#' ##
+#' ## data:  x and y
+#' ## Brunner-Munzel Test Statistic = -1.4673, df = 15.147, p-value = 0.1628
+#' ## 95 percent confidence interval:
+#' ##  -1.0592588  0.1950613
+#' ## sample estimates:
+#' ## P(X<Y)-P(X>Y)
+#' ##    -0.4320988
 #'
 #'
 #' ## Formula interface.
@@ -152,28 +167,43 @@ brunnermunzel.test <- function(x, ...) UseMethod("brunnermunzel.test")
 #' @param alpha significance level, default is 0.05 for 95\% confidence
 #' interval.
 #' @param alternative a character string specifying the alternative
-#' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
-#' \code{"less"}. User can specify just the initial letter.
+#' hypothesis, must be one of \code{two.sided} (default), \code{greater} or
+#' \code{less}. User can specify just the initial letter.
 #' @param perm logical
 #'   \describe{
 #'    \item{FALSE}{(default): perform Brunner-Munzel test.}
 #'    \item{TRUE}{: perform permuted Brunner-Munzel test.}
 #'   }
+#' @param est a method to calculate estimate and confidence interval,
+#' must be either \code{original} (default) or \code{difference}.
+#'    \describe{
+#'      \item{original}{(default): return \eqn{p = P(X < Y) + 0.5 * P(X = Y)}}
+#'      \item{difference}{: return mean difference.
+#'            i.e. \eqn{P(X < Y) - P(X > Y) = 2 * p - 1}}
+#'    }
+#' This change is proposed by Dr. Julian D. Karch.
+#'
 #'
 #' @export
 #'
 brunnermunzel.test.default <-
     function (x, y,
               alternative = c("two.sided", "greater", "less"),
-              alpha = 0.05, perm = FALSE, ...)
+              alpha = 0.05, perm = FALSE,
+              est = c("original", "difference"),
+              ...)
 {
     if (perm) {
         res <- brunnermunzel.permutation.test(x, y,
-                                              alternative = alternative, ...)
+                                              alternative = alternative,
+                                              alpha = alpha,
+                                              est = est,
+                                              ...)
         return(res)
     }
 
     alternative <- match.arg(alternative)
+    est <- match.arg(est)
     DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
     x <- na.omit(x); y <- na.omit(y)
@@ -196,21 +226,34 @@ brunnermunzel.test.default <-
                     pval = numeric(1),
                     PACKAGE = "brunnermunzel")
 
-    ESTIMATE <- res$pst
-    names(ESTIMATE) <- "P(X<Y)+.5*P(X=Y)"
+    if (est == "original") {
+        ESTIMATE <- res$pst
+        names(ESTIMATE) <- "P(X<Y)+.5*P(X=Y)"
+        CONF.INT <- res$ci
+    } else {
+        ESTIMATE <- res$pst * 2 - 1
+        names(ESTIMATE) <- "P(X<Y)-P(X>Y)"
+        CONF.INT = res$ci * 2 - 1
+    }
+
     STATISTIC <- res$stat
     names(STATISTIC) <- "Brunner-Munzel Test Statistic"
     PARAMETER <- res$df
     names(PARAMETER) <- "df"
-    CONF.INT <- res$ci
     names(CONF.INT) <- c("lower", "upper")
     attr(CONF.INT, "conf.level") <- (1 - alpha)
     METHOD <- "Brunner-Munzel Test"
 
-    structure(list(estimate = ESTIMATE, conf.int = CONF.INT,
-                   statistic = STATISTIC, parameter = PARAMETER,
-                   p.value = res$pval, method = METHOD, data.name = DNAME),
-              class = "htest")
+    structure(
+        list(method = METHOD,
+             statistic = STATISTIC,
+             data.name = DNAME,
+             parameter = PARAMETER,
+             estimate = ESTIMATE,
+             p.value = res$pval,
+             conf.int = CONF.INT),
+        class = "htest"
+    )
 }
 
 
@@ -235,7 +278,7 @@ brunnermunzel.test.default <-
 #' @export
 #'
 brunnermunzel.test.formula <-
-    function(formula, data, subset, na.action, ...)
+    function(formula, data, subset = NULL, na.action, ...)
 {
     if (missing(formula)
         || (length(formula) != 3L)

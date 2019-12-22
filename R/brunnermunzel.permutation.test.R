@@ -7,8 +7,9 @@ NULL
 #'
 #' @return A list containing the following components:
 #'  \item{method}{the characters ``permuted Brunner-Munzel Test''}
-#'  \item{p.value}{the \eqn{p}-value of the test.}
 #'  \item{data.name}{a character string giving the name of the data.}
+#'  \item{p.value}{the \eqn{p}-value of the test.}
+#'  \item{estimate}{an estimate of the effect size}
 #'
 #' @references Karin Neubert and Edgar Brunner,
 #' ``A studentized permutation test for the non-parametric
@@ -39,6 +40,21 @@ NULL
 #' ##
 #' ## data:  x and y
 #' ## p-value = 0.158
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##        0.2839506
+#'
+#' ## 'est' option
+#' ## if 'est = "difference"' return P(X<Y) - P(X>Y)
+#' brunnermunzel.permutation.test(x, y, est = "difference")
+#' ##       permuted Brunner-Munzel Test
+#' ##
+#' ## data:  x and y
+#' ## p-value = 0.158
+#' ## sample estimates:
+#' ## P(X<Y)-P(X>Y)
+#' ##    -0.4320988
+#'
 #'
 #' ## Formula interface.
 #' dat <- data.frame(
@@ -53,6 +69,9 @@ NULL
 #' ##
 #' ## data:  value by group
 #' ## p-value = 0.158
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##        0.2839506
 #'
 #'
 #' ## Pain score on the third day after surgery for 14 patients under
@@ -70,6 +89,9 @@ NULL
 #' ##
 #' ## data:  Y and N
 #' ## p-value = 0.008038
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##         0.788961
 #'
 #' ## Formula interface.
 #' dat <- data.frame(
@@ -86,6 +108,9 @@ NULL
 #' ##
 #' ## data:  value by group
 #' ## p-value = 0.008038
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##         0.788961
 #'
 #'
 #' ## Matrix or Table interface.
@@ -99,6 +124,9 @@ NULL
 #' ##
 #' ## data:  Group1 and Group2
 #' ## p-value = 0.1593
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##             0.68
 #'
 #' brunnermunzel.permutation.test(dat2)  # table
 #'
@@ -108,6 +136,9 @@ NULL
 #' ##
 #' ## data:  A and B
 #' ## p-value = 0.1593
+#' ## sample estimates:
+#' ## P(X<Y)+.5*P(X=Y)
+#' ##             0.68
 #'
 #' @export
 #'
@@ -126,8 +157,8 @@ brunnermunzel.permutation.test <-  function(x, ...)
 #' @param y the numeric vector of data values from the sample 2.
 #'  If x is matrix or table, y must be missing.
 #' @param alternative a character string specifying the alternative
-#' hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or
-#' \code{"less"}. User can specify just the initial letter.
+#' hypothesis, must be one of \code{two.sided} (default), \code{greater} or
+#' \code{less}. User can specify just the initial letter.
 #' @param force
 #'   \describe{
 #'    \item{FALSE}{(default): If sample size is too large
@@ -136,6 +167,14 @@ brunnermunzel.permutation.test <-  function(x, ...)
 #'    \item{TRUE}{: perform permuted Brunner-Munzel test
 #'      regardless sample size.}
 #'   }
+#' @param est a method to calculate estimate and confidence interval,
+#' must be either \code{original} (default) or \code{difference}.
+#'    \describe{
+#'      \item{original}{(default): return \eqn{p = P(X < Y) + 0.5 * P(X = Y)}}
+#'      \item{difference}{: return mean difference.
+#'                        i.e. \eqn{P(X < Y) - P(X > Y)} = 2 * p - 1}
+#'    }
+#' This change is proposed by Dr. Julian D. Karch.
 #'
 #' @export
 #'
@@ -143,8 +182,10 @@ brunnermunzel.permutation.test.default <-
     function(x, y,
              alternative = c("two.sided", "greater", "less"),
              force = FALSE,
+             est = c("original", "difference"),
              ...) {
         alternative <- match.arg(alternative)
+        est <- match.arg(est)
         DNAME <-  paste(deparse(substitute(x)), "and",
                         deparse(substitute(y)))
 
@@ -157,7 +198,10 @@ brunnermunzel.permutation.test.default <-
         if (!force && (n_nCr > 40116600L)) { # choose(28, 14)
             warning(c("Sample number is too large. ",
                       "Using 'brunnermunzel.test'\n"))
-            res <- brunnermunzel.test(x, y, alternative = alternative)
+            res <- brunnermunzel.test(x, y,
+                                      alternative = alternative,
+                                      est = est,
+                                      ...)
             return(res)
         }
 
@@ -173,13 +217,23 @@ brunnermunzel.permutation.test.default <-
                         dat = as.double(c(x, y)),
                         alter = as.integer(alter),
                         pval = numeric(1),
+                        pst = numeric(1),
                         PACKAGE = "brunnermunzel")
+
+        if (est == "original") {
+            ESTIMATE <- res$pst
+            names(ESTIMATE) <- "P(X<Y)+.5*P(X=Y)"
+        } else {
+            ESTIMATE <- res$pst * 2 - 1
+            names(ESTIMATE) <- "P(X<Y)-P(X>Y)"
+        }
 
         structure(
             list(
                 method = "permuted Brunner-Munzel Test",
+                data.name = DNAME,
                 p.value = res$pval,
-                data.name = DNAME),
+                estimate = ESTIMATE),
             class = "htest")
     }
 
@@ -205,7 +259,7 @@ brunnermunzel.permutation.test.default <-
 #' @export
 #'
 brunnermunzel.permutation.test.formula <-
-    function(formula, data, subset, na.action, ...)
+    function(formula, data, subset = NULL, na.action, ...)
 {
     if (missing(formula)
        || (length(formula) != 3L)
