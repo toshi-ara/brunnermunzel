@@ -23,6 +23,7 @@
       double precision dat2(n),rkx(r),rky(n-r),rkxy(n),mx,my
       double precision statistics(n_nCr)
       double precision mean     ! external function
+      logical ge                ! external function
 
 !     caluculate estimate
 !     rkx, rky, rkxy: rank in x, y, xy
@@ -51,7 +52,7 @@
 
       count = 0
       do i = 1, n_nCr
-         if (statistics(i).ge.statistics(1)) then
+         if (ge(statistics(i), statistics(1))) then
             count = count + 1
          endif
       enddo
@@ -60,3 +61,14 @@
       return
       end
 
+
+*
+*     ge (nearly equal or greater)
+*
+      logical function ge(a, b)
+      implicit none
+      double precision,intent(in)::a,b
+
+      ge = (abs(a - b).lt.10E-15) .or. (a.ge.b)
+      return
+      end
