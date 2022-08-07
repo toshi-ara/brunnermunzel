@@ -16,7 +16,7 @@ Description: Provides the functions for Brunner-Munzel test and
 URL: https://github.com/toshi-ara/brunnermunzel
 BugReports: https://github.com/toshi-ara/brunnermunzel/issues/
 RoxygenNote: 7.2.1
-Suggests: 
+Suggests:
     testthat, knitr, rmarkdown, dplyr, ggplot2
 VignetteBuilder:
     knitr

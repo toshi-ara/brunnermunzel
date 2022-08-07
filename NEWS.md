@@ -2,6 +2,8 @@
 ## version 2.0 (2022-8-7)
 * fix serious bug in brunnermunzel.permutation.test
   * return TRUE in X >= Y when X is near to Y
+  * Thanks to Gen Kuroki (@genkuroki)
+    * refer to this tweet (https://twitter.com/genkuroki/status/1555694373631033344) (in Japanese)
 
 ## version 1.4.1 (2019-12-22)
 * return the sample estimate in brunnermunzel.permutation.test
