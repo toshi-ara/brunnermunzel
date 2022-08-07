@@ -24,7 +24,7 @@ test_f_group <- function(dat, idx) {
                 y = numeric(ny),
                 xy = numeric(n))
 
-    match <- ((res$x == x) && (res$y == y) && (res$xy == c(x, y)))
+    match <- all((res$x == x), (res$y == y), (res$xy == c(x, y)))
     expect_true(match)
 }
 
