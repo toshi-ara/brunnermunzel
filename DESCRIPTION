@@ -1,8 +1,8 @@
 Package: brunnermunzel
 Type: Package
 Title: (Permuted) Brunner-Munzel Test
-Version: 1.4.1
-Date: 2019-12-22
+Version: 2.0
+Date: 2022-8-7
 Authors@R: person("Toshiaki", "Ara", email = "toshiaki.ara@gmail.com",
   role = c("aut", "cre"))
 License: GPL-2 | GPL-3

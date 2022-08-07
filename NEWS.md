@@ -1,4 +1,8 @@
 # ChangeLog
+## version 2.0 (2022-8-7)
+* fix serious bug in brunnermunzel.permutation.test
+  * return TRUE in X >= Y when X is near to Y
+
 ## version 1.4.1 (2019-12-22)
 * return the sample estimate in brunnermunzel.permutation.test
 * return 'P(X<Y) - P(X>Y)' as the sample estimate
