@@ -1,5 +1,5 @@
 ---
-title: "Usage of `brunnermunzel` package"
+title: "Usage of brunnermunzel package"
 author: "Toshiaki Ara"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
