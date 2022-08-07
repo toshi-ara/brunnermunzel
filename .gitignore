@@ -8,3 +8,5 @@ inst/doc
 .Ruserdata
 *.o
 *.so
+/doc/
+/Meta/
